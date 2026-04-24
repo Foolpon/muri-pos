@@ -9,35 +9,35 @@
   <meta name="apple-mobile-web-app-title" content="蘋果咖啡">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
+/* 蘋方字體 */
 
 :root {
-  --muri-primary: #c8a96a;
-  --muri-light: #e8c888;
-  --muri-bg: #1a1610;
-  --apple-primary: #6aaa88;
-  --apple-light: #88ccaa;
-  --apple-bg: #101a14;
-  --bg: #111318;
-  --surface: #1a1e24;
-  --border: #2a2820;
-  --text: #f0ece0;
-  --text2: #8a8070;
-  --text3: #4a4438;
+  --muri-primary: #F5A623;
+  --muri-light: #FFD080;
+  --muri-bg: #1B2A4A;
+  --apple-primary: #F5A623;
+  --apple-light: #FFD080;
+  --apple-bg: #1B2A4A;
+  --bg: #0D1E3A;
+  --surface: #1B2A4A;
+  --border: #2A3D60;
+  --text: #F5A623;
+  --text2: #FFD080;
+  --text3: #8A9DBD;
   --green: #5aaa70;
-  --customer-color: #e8904a;
-  --settings-color: #7a9ab8;
-
-  --serif: 'Noto Serif TC', serif;
-  --mono: 'DM Mono', monospace;
+  --red: #cc5544;
+  --customer-color: #F5A623;
+  --settings-color: #F5A623;
+  --serif: 'PingFang TC', 'Apple SD Gothic Neo', 'Microsoft JhengHei', sans-serif;
+  --mono: 'PingFang TC', monospace;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-body { font-family: var(--serif); background: var(--bg); color: var(--text); min-height: 100vh; }
+body { font-family: 'PingFang TC', 'Apple SD Gothic Neo', 'Microsoft JhengHei', sans-serif; font-weight: 600; background: var(--bg); color: var(--text); min-height: 100vh; }
 
 /* ═══ 主導覽 ═══ */
 .main-nav {
   position: fixed; top: 0; left: 0; right: 0; height: 50px;
-  background: rgba(17,19,24,0.97); border-bottom: 1px solid var(--border);
+  background: rgba(13,30,58,0.97); border-bottom: 1px solid var(--border);
   backdrop-filter: blur(10px); z-index: 1000;
   display: flex; align-items: stretch;
 }
@@ -49,15 +49,15 @@ body { font-family: var(--serif); background: var(--bg); color: var(--text); min
   font-size: 11px; color: var(--text3); cursor: pointer;
   border-bottom: 2px solid transparent; transition: all 0.2s; white-space: nowrap;
 }
-.nav-tab.am { color: var(--muri-primary); border-bottom-color: var(--muri-primary); }
-.nav-tab.aa { color: var(--apple-primary); border-bottom-color: var(--apple-primary); }
-.nav-tab.ar { color: #888; border-bottom-color: #888; }
-.nav-tab.ap { color: #a080c8; border-bottom-color: #a080c8; }
+.nav-tab.am { color: #F5A623; border-bottom-color: #F5A623; }
+.nav-tab.aa { color: #F5A623; border-bottom-color: #F5A623; }
+.nav-tab.ar { color: #FFD080; border-bottom-color: #FFD080; }
+.nav-tab.ap { color: #F5A623; border-bottom-color: #F5A623; }
 .dot { width: 6px; height: 6px; border-radius: 50%; }
-.dm { background: var(--muri-primary); }
-.da { background: var(--apple-primary); }
-.dr { background: #666; }
-.dp { background: #a080c8; }
+.dm { background: #F5A623; }
+.da { background: #F5A623; }
+.dr { background: #FFD080; }
+.dp { background: #F5A623; }
 
 /* ═══ 頁面 ═══ */
 .page { display: none; padding-top: 50px; min-height: 100vh; }
@@ -106,43 +106,69 @@ body { font-family: var(--serif); background: var(--bg); color: var(--text); min
   border-top: 1px solid var(--border);
 }
 
+
+/* ═══ 商品卡片響應式 ═══ */
 .item-card {
-  background: var(--surface); padding: 14px 8px 12px;
-  text-align: center; cursor: pointer; position: relative;
+  background: #1B2A4A;
+  padding: clamp(10px, 2.5vw, 18px) clamp(8px, 2vw, 14px);
+  cursor: pointer; position: relative;
   transition: background 0.1s; user-select: none;
+  display: flex; flex-direction: row;
+  align-items: center; justify-content: space-between;
+  border: 1px solid #2A3D60;
+  min-height: clamp(56px, 10vw, 80px);
+  gap: 8px;
 }
-.item-card:active { transform: scale(0.96); background: #222; }
-.item-name { font-size: 12px; line-height: 1.4; margin-bottom: 4px; color: var(--text); }
-/* 一欄時item排版 */
-.items-grid-1 .item-card {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 13px 16px; text-align: left;
+.item-card:active { transform: scale(0.96); background: #2A3D60; }
+.item-name {
+  font-size: clamp(15px, 3.5vw, 26px);
+  line-height: 1.3;
+  color: #FFD080;
+  font-weight: 700;
+  font-family: 'PingFang TC', sans-serif;
+  flex: 1;
 }
-.items-grid-1 .item-name { margin-bottom: 0; flex: 1; }
-.item-price { font-family: var(--mono); font-size: 12px; }
-.muri-pg .item-price { color: var(--muri-primary); }
-.apple-pg .item-price { color: var(--apple-primary); }
+.item-price {
+  font-size: clamp(15px, 3.5vw, 26px);
+  font-weight: 700;
+  color: #F5A623;
+  font-family: 'PingFang TC', sans-serif;
+  flex-shrink: 0;
+  text-align: right;
+}
 .qty-badge {
-  position: absolute; top: 3px; right: 3px;
-  width: 17px; height: 17px; border-radius: 50%;
-  font-family: var(--mono); font-size: 9px; font-weight: 700;
-  display: none; align-items: center; justify-content: center; color: #111;
+  position: absolute; top: 4px; right: 4px;
+  width: clamp(18px, 4vw, 26px);
+  height: clamp(18px, 4vw, 26px);
+  border-radius: 50%;
+  font-size: clamp(10px, 2.5vw, 13px);
+  font-weight: 700;
+  display: none; align-items: center; justify-content: center;
+  color: #1B2A4A;
+  background: #F5A623;
 }
-.items-grid-1 .qty-badge { top: 50%; transform: translateY(-50%); right: 44px; }
-.muri-pg .qty-badge { background: var(--muri-primary); }
-.apple-pg .qty-badge { background: var(--apple-primary); }
 .item-card.hq .qty-badge { display: flex; }
+.muri-pg .item-price { color: #F5A623; }
+.apple-pg .item-price { color: #F5A623; }
+
+/* 甜點一欄 — 同樣左右排列 */
+.items-grid-1 .item-card {
+  padding: clamp(12px, 2.5vw, 18px) clamp(12px, 3vw, 20px);
+  min-height: clamp(50px, 8vw, 70px);
+}
+.items-grid-1 .qty-badge { top: 50%; transform: translateY(-50%); right: 8px; }
+
 
 /* ═══ 備註 ═══ */
 .note-row {
   padding: 9px 14px; display: flex; gap: 8px; align-items: center;
   border-top: 1px solid var(--border);
 }
-.note-label { font-size: 11px; color: var(--text3); white-space: nowrap; }
+.note-label { font-size: 11px; color: #8A9DBD; white-space: nowrap; }
 .note-input {
   flex: 1; background: var(--surface); border: 1px solid var(--border);
   border-radius: 6px; padding: 6px 10px; color: var(--text);
-  font-family: var(--serif); font-size: 12px; outline: none;
+  font-family: 'PingFang TC', 'Apple SD Gothic Neo', 'Microsoft JhengHei', sans-serif; font-size: 12px; outline: none;
 }
 .muri-pg .note-input:focus { border-color: var(--muri-primary); }
 .apple-pg .note-input:focus { border-color: var(--apple-primary); }
@@ -164,8 +190,8 @@ body { font-family: var(--serif); background: var(--bg); color: var(--text); min
 }
 .muri-pg .qb:active { background: var(--muri-primary); color: #111; }
 .apple-pg .qb:active { background: var(--apple-primary); color: #111; }
-.qn { font-family: var(--mono); font-size: 12px; min-width: 18px; text-align: center; }
-.ci-sub { font-family: var(--mono); font-size: 11px; min-width: 42px; text-align: right; }
+.qn { font-family: 'PingFang TC', monospace; font-size: 12px; min-width: 18px; text-align: center; }
+.ci-sub { font-family: 'PingFang TC', monospace; font-size: 11px; min-width: 42px; text-align: right; }
 .muri-pg .ci-sub { color: var(--muri-primary); }
 .apple-pg .ci-sub { color: var(--apple-primary); }
 
@@ -174,18 +200,18 @@ body { font-family: var(--serif); background: var(--bg); color: var(--text); min
   padding: 10px 14px; margin: 3px 0;
 }
 .total-lbl { font-size: 13px; color: var(--text2); }
-.total-amt { font-family: var(--mono); font-size: 22px; font-weight: 700; }
+.total-amt { font-family: 'PingFang TC', monospace; font-size: 22px; font-weight: 700; }
 .muri-pg .total-amt { color: var(--muri-light); }
 .apple-pg .total-amt { color: var(--apple-light); }
 
 .submit-btn {
   margin: 4px 14px 20px; width: calc(100% - 28px);
   padding: 14px; border: none; border-radius: 10px;
-  font-family: var(--serif); font-size: 15px; font-weight: 700;
+  font-family: 'PingFang TC', 'Apple SD Gothic Neo', 'Microsoft JhengHei', sans-serif; font-size: 15px; font-weight: 700;
   cursor: pointer; letter-spacing: 0.08em; transition: all 0.15s;
 }
-.muri-pg .submit-btn { background: var(--muri-primary); color: #1a1610; }
-.apple-pg .submit-btn { background: var(--apple-primary); color: #101a14; }
+.muri-pg .submit-btn { background: #F5A623; color: #0D1E3A; }
+.apple-pg .submit-btn { background: #F5A623; color: #0D1E3A; }
 .submit-btn:disabled { background: var(--border); color: var(--text3); cursor: not-allowed; }
 
 /* ═══ 成功畫面 ═══ */
@@ -201,7 +227,7 @@ body { font-family: var(--serif); background: var(--bg); color: var(--text); min
 .s-sub { font-size: 13px; color: var(--text2); }
 .s-back {
   margin-top: 12px; padding: 11px 30px; border-radius: 8px;
-  border: none; font-family: var(--serif); font-size: 14px; font-weight: 700; cursor: pointer;
+  border: none; font-family: 'PingFang TC', 'Apple SD Gothic Neo', 'Microsoft JhengHei', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer;
 }
 .muri-pg .s-back { background: var(--muri-primary); color: #111; }
 .apple-pg .s-back { background: var(--apple-primary); color: #111; }
@@ -213,12 +239,12 @@ body { font-family: var(--serif); background: var(--bg); color: var(--text); min
 }
 .admin-title { font-size: 14px; font-weight: 700; }
 .stats { display: flex; gap: 8px; align-items: center; }
-.stat-pill { font-family: var(--mono); font-size: 11px; padding: 3px 9px; border-radius: 20px; background: var(--surface); }
+.stat-pill { font-family: 'PingFang TC', monospace; font-size: 11px; padding: 3px 9px; border-radius: 20px; background: var(--surface); }
 .muri-admin .stat-pill span { color: var(--muri-primary); }
 .apple-admin .stat-pill span { color: var(--apple-primary); }
 .refresh-btn {
   padding: 5px 11px; border-radius: 6px; border: 1px solid var(--border);
-  background: transparent; color: var(--text2); font-size: 11px; cursor: pointer; font-family: var(--serif);
+  background: transparent; color: var(--text2); font-size: 11px; cursor: pointer; font-family: 'PingFang TC', 'Apple SD Gothic Neo', 'Microsoft JhengHei', sans-serif;
 }
 .orders-list { padding: 8px 14px; }
 .order-card {
@@ -227,17 +253,17 @@ body { font-family: var(--serif); background: var(--bg); color: var(--text); min
 }
 .order-card.done { opacity: 0.45; }
 .oc-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 5px; }
-.oc-id { font-family: var(--mono); font-size: 10px; color: var(--text3); }
-.oc-time { font-family: var(--mono); font-size: 11px; color: var(--text2); }
+.oc-id { font-family: 'PingFang TC', monospace; font-size: 10px; color: var(--text3); }
+.oc-time { font-family: 'PingFang TC', monospace; font-size: 11px; color: var(--text2); }
 .oc-items { font-size: 12px; color: var(--text); line-height: 1.6; margin-bottom: 7px; }
 .oc-bottom { display: flex; justify-content: space-between; align-items: center; }
-.oc-total { font-family: var(--mono); font-size: 16px; font-weight: 700; }
+.oc-total { font-family: 'PingFang TC', monospace; font-size: 16px; font-weight: 700; }
 .muri-admin .oc-total { color: var(--muri-primary); }
 .apple-admin .oc-total { color: var(--apple-primary); }
 .oc-note { font-size: 11px; color: var(--text3); font-style: italic; }
 .done-btn {
   padding: 5px 13px; border-radius: 6px; border: none;
-  font-family: var(--serif); font-size: 12px; font-weight: 700; cursor: pointer;
+  font-family: 'PingFang TC', 'Apple SD Gothic Neo', 'Microsoft JhengHei', sans-serif; font-size: 12px; font-weight: 700; cursor: pointer;
 }
 .muri-admin .done-btn { background: var(--muri-primary); color: #111; }
 .apple-admin .done-btn { background: var(--apple-primary); color: #111; }
@@ -275,7 +301,7 @@ body { font-family: var(--serif); background: var(--bg); color: var(--text); min
 .field-input {
   width: 100%; background: var(--surface); border: 1px solid var(--border);
   border-radius: 6px; padding: 9px 12px; color: var(--text);
-  font-family: var(--serif); font-size: 13px; outline: none;
+  font-family: 'PingFang TC', 'Apple SD Gothic Neo', 'Microsoft JhengHei', sans-serif; font-size: 13px; outline: none;
 }
 .field-input:focus { border-color: #a080c8; }
 
@@ -285,7 +311,7 @@ body { font-family: var(--serif); background: var(--bg); color: var(--text); min
   padding: 6px 12px; border-radius: 6px;
   border: 1px solid var(--border); background: var(--surface);
   color: var(--text2); font-size: 12px; cursor: pointer;
-  font-family: var(--serif); transition: all 0.15s;
+  font-family: 'PingFang TC', 'Apple SD Gothic Neo', 'Microsoft JhengHei', sans-serif; transition: all 0.15s;
 }
 .option-btn.selected { background: #a080c8; border-color: #a080c8; color: #111; font-weight: 700; }
 
@@ -322,7 +348,7 @@ body { font-family: var(--serif); background: var(--bg); color: var(--text); min
   display: flex; align-items: center; justify-content: center;
 }
 .bqb:active { background: #a080c8; color: #111; }
-.bqn { font-family: var(--mono); font-size: 12px; min-width: 16px; text-align: center; color: var(--text); }
+.bqn { font-family: 'PingFang TC', monospace; font-size: 12px; min-width: 16px; text-align: center; color: var(--text); }
 
 /* 載入中 */
 .loading-items { padding: 20px; text-align: center; color: var(--text3); font-size: 12px; }
@@ -331,7 +357,7 @@ body { font-family: var(--serif); background: var(--bg); color: var(--text); min
 .pu-submit {
   width: 100%; padding: 14px; border: none; border-radius: 10px;
   background: #a080c8; color: #111;
-  font-family: var(--serif); font-size: 15px; font-weight: 700;
+  font-family: 'PingFang TC', 'Apple SD Gothic Neo', 'Microsoft JhengHei', sans-serif; font-size: 15px; font-weight: 700;
   cursor: pointer; letter-spacing: 0.08em; margin-top: 8px;
 }
 .pu-submit:disabled { background: var(--border); color: var(--text3); cursor: not-allowed; }
@@ -344,23 +370,23 @@ body { font-family: var(--serif); background: var(--bg); color: var(--text); min
 }
 .pu-order-card.done { opacity: 0.45; }
 .pu-oc-name { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
-.pu-oc-meta { font-size: 11px; color: var(--text3); margin-bottom: 8px; font-family: var(--mono); }
+.pu-oc-meta { font-size: 11px; color: var(--text3); margin-bottom: 8px; font-family: 'PingFang TC', monospace; }
 .pu-oc-section { margin-bottom: 6px; }
 .pu-oc-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 3px; }
 .pu-oc-content { font-size: 12px; color: var(--text); line-height: 1.6; }
 
 /* ═══ 報表 ═══ */
 .report-wrap { padding: 14px 14px 30px; }
-.report-date-txt { font-size: 11px; color: var(--text3); font-family: var(--mono); margin-bottom: 4px; }
+.report-date-txt { font-size: 11px; color: var(--text3); font-family: 'PingFang TC', monospace; margin-bottom: 4px; }
 .report-title { font-size: 20px; font-weight: 700; margin-bottom: 14px; }
 .rcard { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 13px 15px; margin-bottom: 9px; }
 .rcard-title { font-size: 13px; font-weight: 700; padding-bottom: 9px; margin-bottom: 9px; border-bottom: 1px solid var(--border); }
 .rrow { display: flex; justify-content: space-between; font-size: 12px; color: var(--text2); margin-bottom: 5px; }
-.rrow .rv { font-family: var(--mono); color: var(--text); }
+.rrow .rv { font-family: 'PingFang TC', monospace; color: var(--text); }
 .rrow.hl { margin-top: 7px; padding-top: 7px; border-top: 1px solid var(--border); }
 .rrow.hl .rl { font-weight: 700; color: var(--text); }
 .rrow.hl .rv { color: var(--green); font-size: 15px; font-weight: 700; }
-.copy-btn { width: 100%; padding: 12px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; color: var(--text2); font-family: var(--serif); font-size: 13px; cursor: pointer; }
+.copy-btn { width: 100%; padding: 12px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; color: var(--text2); font-family: 'PingFang TC', 'Apple SD Gothic Neo', 'Microsoft JhengHei', sans-serif; font-size: 13px; cursor: pointer; }
 
 /* Toast */
 .toast {
@@ -396,11 +422,11 @@ body { font-family: var(--serif); background: var(--bg); color: var(--text); min
   border-bottom: 1px solid var(--border);
   background: inherit;
 }
-.dt-label { font-size: 11px; color: var(--text3); white-space: nowrap; }
+.dt-label { font-size: 11px; color: #8A9DBD; white-space: nowrap; }
 .dt-input {
   flex: 1; background: var(--surface); border: 1px solid var(--border);
   border-radius: 6px; padding: 6px 10px; color: var(--text);
-  font-family: var(--mono); font-size: 12px; outline: none;
+  font-family: 'PingFang TC', monospace; font-size: 12px; outline: none;
   min-width: 0;
 }
 .muri-pg .dt-input:focus { border-color: var(--muri-primary); }
@@ -414,10 +440,10 @@ body { font-family: var(--serif); background: var(--bg); color: var(--text); min
   background: inherit;
 }
 
-.nav-tab.ac { color: var(--customer-color); border-bottom-color: var(--customer-color); }
-.nav-tab.as { color: var(--settings-color); border-bottom-color: var(--settings-color); }
-.dot-c { background: var(--customer-color); }
-.dot-s { background: var(--settings-color); }
+.nav-tab.ac { color: #F5A623; border-bottom-color: #F5A623; }
+.nav-tab.as { color: #F5A623; border-bottom-color: #F5A623; }
+.dot-c { background: #F5A623; }
+.dot-s { background: #F5A623; }
 
 /* ═══ 客戶資料庫 ═══ */
 .cdb-search-row {
@@ -428,13 +454,13 @@ body { font-family: var(--serif); background: var(--bg); color: var(--text); min
 .cdb-search {
   flex: 1; background: var(--surface); border: 1px solid var(--border);
   border-radius: 8px; padding: 9px 12px; color: var(--text);
-  font-family: var(--serif); font-size: 13px; outline: none;
+  font-family: 'PingFang TC', 'Apple SD Gothic Neo', 'Microsoft JhengHei', sans-serif; font-size: 13px; outline: none;
 }
 .cdb-search:focus { border-color: var(--customer-color); }
 .add-customer-btn {
   padding: 8px 14px; border-radius: 8px; border: none;
   background: var(--customer-color); color: #111;
-  font-family: var(--serif); font-size: 13px; font-weight: 700; cursor: pointer;
+  font-family: 'PingFang TC', 'Apple SD Gothic Neo', 'Microsoft JhengHei', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer;
   white-space: nowrap;
 }
 .cdb-list { padding: 8px 14px; }
@@ -446,7 +472,7 @@ body { font-family: var(--serif); background: var(--bg); color: var(--text); min
 .cdb-card:active { border-color: var(--customer-color); }
 .cdb-card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
 .cdb-name { font-size: 14px; font-weight: 700; color: var(--text); }
-.cdb-count { font-family: var(--mono); font-size: 10px; color: var(--customer-color);
+.cdb-count { font-family: 'PingFang TC', monospace; font-size: 10px; color: var(--customer-color);
   background: #2a1e10; padding: 2px 8px; border-radius: 10px; }
 .cdb-info { font-size: 11px; color: var(--text2); line-height: 1.6; }
 .cdb-empty { text-align: center; padding: 40px 20px; color: var(--text3); font-size: 13px; }
@@ -473,18 +499,18 @@ body { font-family: var(--serif); background: var(--bg); color: var(--text); min
 .modal-input {
   width: 100%; background: var(--surface); border: 1px solid var(--border);
   border-radius: 6px; padding: 9px 12px; color: var(--text);
-  font-family: var(--serif); font-size: 13px; outline: none;
+  font-family: 'PingFang TC', 'Apple SD Gothic Neo', 'Microsoft JhengHei', sans-serif; font-size: 13px; outline: none;
 }
 .modal-input:focus { border-color: var(--customer-color); }
 .modal-save-btn {
   width: 100%; padding: 13px; border: none; border-radius: 8px;
   background: var(--customer-color); color: #111;
-  font-family: var(--serif); font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 4px;
+  font-family: 'PingFang TC', 'Apple SD Gothic Neo', 'Microsoft JhengHei', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 4px;
 }
 .modal-delete-btn {
   width: 100%; padding: 10px; border: 1px solid #cc4433; border-radius: 8px;
   background: transparent; color: #cc4433;
-  font-family: var(--serif); font-size: 13px; cursor: pointer; margin-top: 8px;
+  font-family: 'PingFang TC', 'Apple SD Gothic Neo', 'Microsoft JhengHei', sans-serif; font-size: 13px; cursor: pointer; margin-top: 8px;
 }
 
 /* ═══ 設定頁面 ═══ */
@@ -501,7 +527,7 @@ body { font-family: var(--serif); background: var(--bg); color: var(--text); min
   border-radius: 6px; margin-bottom: 4px;
 }
 .settings-item-name { flex: 1; font-size: 13px; }
-.settings-item-price { font-family: var(--mono); font-size: 12px; color: var(--settings-color); min-width: 50px; text-align: right; }
+.settings-item-price { font-family: 'PingFang TC', monospace; font-size: 12px; color: var(--settings-color); min-width: 50px; text-align: right; }
 .settings-delete-btn {
   width: 26px; height: 26px; border-radius: 6px; border: none;
   background: #2a1a1a; color: #cc4433; font-size: 14px; cursor: pointer;
@@ -513,25 +539,40 @@ body { font-family: var(--serif); background: var(--bg); color: var(--text); min
 .settings-add-input {
   flex: 1; background: var(--surface); border: 1px solid var(--border);
   border-radius: 6px; padding: 8px 10px; color: var(--text);
-  font-family: var(--serif); font-size: 12px; outline: none; min-width: 0;
+  font-family: 'PingFang TC', 'Apple SD Gothic Neo', 'Microsoft JhengHei', sans-serif; font-size: 12px; outline: none; min-width: 0;
 }
 .settings-add-input:focus { border-color: var(--settings-color); }
 .settings-add-btn {
   padding: 8px 14px; border-radius: 6px; border: none;
   background: var(--settings-color); color: #111;
-  font-family: var(--serif); font-size: 12px; font-weight: 700; cursor: pointer;
+  font-family: 'PingFang TC', 'Apple SD Gothic Neo', 'Microsoft JhengHei', sans-serif; font-size: 12px; font-weight: 700; cursor: pointer;
   white-space: nowrap;
 }
 .settings-price-input {
   width: 70px; background: var(--surface); border: 1px solid var(--border);
   border-radius: 6px; padding: 8px 8px; color: var(--text);
-  font-family: var(--mono); font-size: 12px; outline: none; text-align: center;
+  font-family: 'PingFang TC', monospace; font-size: 12px; outline: none; text-align: center;
 }
 .settings-reload-btn {
   width: 100%; padding: 12px; background: var(--surface);
   border: 1px solid var(--border); border-radius: 8px;
-  color: var(--text2); font-family: var(--serif); font-size: 13px; cursor: pointer; margin-top: 8px;
+  color: var(--text2); font-family: 'PingFang TC', 'Apple SD Gothic Neo', 'Microsoft JhengHei', sans-serif; font-size: 13px; cursor: pointer; margin-top: 8px;
 }
+
+/* 新客勾選 */
+.new-client-toggle {
+  display: flex; align-items: center; gap: 6px;
+  padding: 0 4px; cursor: pointer; flex-shrink: 0;
+}
+.new-client-check {
+  width: 20px; height: 20px; border-radius: 4px;
+  border: 2px solid #F5A623; background: transparent;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s; flex-shrink: 0;
+}
+.new-client-check.checked { background: #F5A623; }
+.new-client-check.checked::after { content: '✓'; color: #1B2A4A; font-size: 12px; font-weight: 700; }
+.new-client-label { font-size: 12px; color: #F5A623; font-weight: 700; white-space: nowrap; }
 </style>
 </head>
 <body>
@@ -557,13 +598,17 @@ body { font-family: var(--serif); background: var(--bg); color: var(--text); min
     <div class="store-name" style="color:var(--muri-light)">⛰ 木日山咖啡</div>
     <div class="store-sub">請選擇品項</div>
   </div>
-  <!-- 客人稱呼（移到品項上方） -->
+  <!-- 客人稱呼 -->
   <div class="customer-top-row" style="background:var(--muri-bg)">
     <span class="dt-label">客人</span>
     <div class="autocomplete-wrap" style="flex:1;margin-right:0">
       <input class="dt-input" id="muri-customer" placeholder="稱呼（選填）" autocomplete="off"
         oninput="acInput('muri')" onblur="acBlur('muri')" onkeydown="acKey(event,'muri')">
       <div class="autocomplete-dropdown" id="muri-ac-drop" style="display:none"></div>
+    </div>
+    <div class="new-client-toggle" onclick="toggleNewClient('muri')">
+      <div class="new-client-check" id="muri-new-check"></div>
+      <span class="new-client-label">新客</span>
     </div>
   </div>
   <!-- 日期時間 -->
@@ -627,6 +672,10 @@ body { font-family: var(--serif); background: var(--bg); color: var(--text); min
       <input class="dt-input" id="apple-customer" placeholder="稱呼（選填）" autocomplete="off"
         oninput="acInput('apple')" onblur="acBlur('apple')" onkeydown="acKey(event,'apple')">
       <div class="autocomplete-dropdown" id="apple-ac-drop" style="display:none"></div>
+    </div>
+    <div class="new-client-toggle" onclick="toggleNewClient('apple')">
+      <div class="new-client-check" id="apple-new-check"></div>
+      <span class="new-client-label">新客</span>
     </div>
   </div>
   <!-- 日期時間 -->
@@ -827,19 +876,32 @@ body { font-family: var(--serif); background: var(--bg); color: var(--text); min
     <div class="report-date-txt" id="rdate"></div>
     <div class="report-title">📊 今日匯總報表</div>
     <div class="rcard">
-      <div class="rcard-title" style="color:var(--muri-primary)">⛰ 木日山</div>
+      <div class="rcard-title" style="color:#F5A623">⛰ 木日山</div>
       <div class="rrow"><span class="rl">來客數</span><span class="rv" id="rmc">—</span></div>
-      <div class="rrow hl"><span class="rl">總營業額</span><span class="rv" id="rmr">—</span></div>
+      <div class="rrow"><span class="rl">新客數</span><span class="rv" id="rmn">—</span></div>
+      <div class="rrow"><span class="rl">營業額</span><span class="rv" id="rmr">—</span></div>
+      <div class="rrow"><span class="rl">成本</span><span class="rv" id="rmco">—</span></div>
+      <div class="rrow hl"><span class="rl">毛利</span><span class="rv" id="rmp2">—</span></div>
+      <div class="rrow" style="margin-top:8px"><span class="rl" style="font-weight:700">品項計數</span></div>
+      <div id="rm-items" style="font-size:11px;color:#FFD080;line-height:1.8;margin-top:4px"></div>
     </div>
     <div class="rcard">
-      <div class="rcard-title" style="color:var(--apple-primary)">🍎 景華街</div>
+      <div class="rcard-title" style="color:#FFD080">🍎 景華街</div>
       <div class="rrow"><span class="rl">來客數</span><span class="rv" id="rac">—</span></div>
-      <div class="rrow hl"><span class="rl">總營業額</span><span class="rv" id="rar">—</span></div>
+      <div class="rrow"><span class="rl">新客數</span><span class="rv" id="ran">—</span></div>
+      <div class="rrow"><span class="rl">營業額</span><span class="rv" id="rar">—</span></div>
+      <div class="rrow"><span class="rl">成本</span><span class="rv" id="raco">—</span></div>
+      <div class="rrow hl"><span class="rl">毛利</span><span class="rv" id="rap2">—</span></div>
+      <div class="rrow" style="margin-top:8px"><span class="rl" style="font-weight:700">品項計數</span></div>
+      <div id="ra-items" style="font-size:11px;color:#FFD080;line-height:1.8;margin-top:4px"></div>
     </div>
     <div class="rcard">
-      <div class="rcard-title" style="color:#888">📌 兩店合計</div>
+      <div class="rcard-title" style="color:#8A9DBD">📌 兩店合計</div>
       <div class="rrow"><span class="rl">總來客數</span><span class="rv" id="rtc">—</span></div>
-      <div class="rrow hl"><span class="rl">總營業額</span><span class="rv" id="rtr">—</span></div>
+      <div class="rrow"><span class="rl">總新客數</span><span class="rv" id="rtn">—</span></div>
+      <div class="rrow"><span class="rl">總營業額</span><span class="rv" id="rtr">—</span></div>
+      <div class="rrow"><span class="rl">總成本</span><span class="rv" id="rtco">—</span></div>
+      <div class="rrow hl"><span class="rl">總毛利</span><span class="rv" id="rtpr">—</span></div>
     </div>
     <button class="copy-btn" onclick="copyReport()">📋 複製報表文字</button>
   </div>
@@ -898,23 +960,23 @@ const GAS = 'https://script.google.com/macros/s/AKfycbzbXgDEDko0WVe8khVzPPmOL6ds
 
 const muriMenu = [
   // 飲料
-  {n:'蘋果咖啡 M', p:110, c:0}, {n:'蘋果咖啡 L', p:140, c:0},
-  {n:'咖啡拿鐵 M', p:90, c:0}, {n:'咖啡拿鐵 L', p:100, c:0},
-  {n:'美式咖啡 M', p:70, c:0}, {n:'美式咖啡 L', p:80, c:0},
-  {n:'手沖咖啡', p:150, c:0},
-  {n:'蘋果汁 M', p:100, c:0}, {n:'蘋果汁 L', p:120, c:0},
-  {n:'蘋果拿鐵 M', p:110, c:0}, {n:'蘋果拿鐵 L', p:140, c:0},
-  {n:'蘋果紅茶 M', p:110, c:0}, {n:'蘋果紅茶 L', p:130, c:0},
-  {n:'蘋果牛奶 M', p:100, c:0}, {n:'蘋果牛奶 L', p:120, c:0},
-  {n:'檸檬咖啡 M', p:110, c:0}, {n:'檸檬咖啡 L', p:120, c:0},
-  {n:'卡布奇諾 M', p:90, c:0}, {n:'卡布奇諾 L', p:100, c:0},
-  {n:'多份濃縮', p:30, c:0}, {n:'風味糖漿', p:30, c:0},
+  {n:'蘋果咖啡 M', p:110, cost:60.2, c:0}, {n:'蘋果咖啡 L', p:140, cost:83.4, c:0},
+  {n:'咖啡拿鐵 M', p:90, cost:49.6, c:0}, {n:'咖啡拿鐵 L', p:100, cost:57.1, c:0},
+  {n:'美式咖啡 M', p:70, cost:27.2, c:0}, {n:'美式咖啡 L', p:80, cost:27.2, c:0},
+  {n:'手沖咖啡', p:150, cost:61.6, c:0},
+  {n:'蘋果汁 M', p:100, cost:38.2, c:0}, {n:'蘋果汁 L', p:120, cost:54.2, c:0},
+  {n:'蘋果拿鐵 M', p:110, cost:67.2, c:0}, {n:'蘋果拿鐵 L', p:140, cost:91.3, c:0},
+  {n:'蘋果紅茶 M', p:110, cost:40.5, c:0}, {n:'蘋果紅茶 L', p:130, cost:48.5, c:0},
+  {n:'蘋果牛奶 M', p:100, cost:47.2, c:0}, {n:'蘋果牛奶 L', p:120, cost:63.7, c:0},
+  {n:'檸檬咖啡 M', p:110, cost:55.2, c:0}, {n:'檸檬咖啡 L', p:120, cost:55.2, c:0},
+  {n:'卡布奇諾 M', p:90, cost:42.2, c:0}, {n:'卡布奇諾 L', p:100, cost:57.1, c:0},
+  {n:'多份濃縮', p:30, cost:23.2, c:0}, {n:'風味糖漿', p:30, cost:11.4, c:0},
   // 甜點（含枸杞紅棗茶包）
-  {n:'雞蛋糕', p:60, c:1}, {n:'小司康', p:50, c:1},
-  {n:'手工焦糖布丁', p:50, c:1}, {n:'瑪德蓮', p:50, c:1},
-  {n:'黑糖核桃肉桂捲', p:50, c:1},
-  {n:'鳳梨乾', p:30, c:1}, {n:'檸檬乾', p:50, c:1},
-  {n:'枸杞紅棗茶包', p:50, c:1},
+  {n:'雞蛋糕', p:60, cost:24.1, c:1}, {n:'小司康', p:50, cost:35, c:1},
+  {n:'手工焦糖布丁', p:50, cost:45, c:1}, {n:'瑪德蓮', p:50, cost:40, c:1},
+  {n:'黑糖核桃肉桂捲', p:50, cost:40, c:1},
+  {n:'鳳梨乾', p:30, cost:24, c:1}, {n:'檸檬乾', p:50, cost:30, c:1},
+  {n:'枸杞紅棗茶包', p:50, cost:32, c:1},
   // 豆子與濾掛（含分類）
   {n:'1包咖啡豆', p:500, c:2, g:'咖啡豆'},
   {n:'4包咖啡豆', p:1000, c:2, g:'咖啡豆'},
@@ -930,19 +992,19 @@ const muriMenu = [
 
 const appleMenu = [
   // 飲料
-  {n:'手沖咖啡', p:150, c:0},
+  {n:'手沖咖啡', p:150, cost:61.6, c:0},
   {n:'美式咖啡 S', p:50, c:0}, {n:'美式咖啡 M', p:60, c:0},
   {n:'咖啡拿鐵 S', p:65, c:0}, {n:'咖啡拿鐵 M', p:80, c:0},
   {n:'香草拿鐵 S', p:75, c:0}, {n:'香草拿鐵 M', p:90, c:0},
   {n:'蘋果咖啡 M', p:100, c:0},
-  {n:'蘋果汁 M', p:100, c:0},
-  {n:'多份濃縮', p:30, c:0}, {n:'風味糖漿', p:30, c:0},
+  {n:'蘋果汁 M', p:100, cost:38.2, c:0},
+  {n:'多份濃縮', p:30, cost:23.2, c:0}, {n:'風味糖漿', p:30, cost:11.4, c:0},
   // 甜點
-  {n:'雞蛋糕', p:60, c:1}, {n:'小司康', p:50, c:1},
-  {n:'手工焦糖布丁', p:50, c:1}, {n:'瑪德蓮', p:50, c:1},
-  {n:'黑糖核桃肉桂捲', p:50, c:1},
-  {n:'鳳梨乾', p:30, c:1}, {n:'檸檬乾', p:50, c:1},
-  {n:'枸杞紅棗茶包', p:50, c:1},
+  {n:'雞蛋糕', p:60, cost:24.1, c:1}, {n:'小司康', p:50, cost:35, c:1},
+  {n:'手工焦糖布丁', p:50, cost:45, c:1}, {n:'瑪德蓮', p:50, cost:40, c:1},
+  {n:'黑糖核桃肉桂捲', p:50, cost:40, c:1},
+  {n:'鳳梨乾', p:30, cost:24, c:1}, {n:'檸檬乾', p:50, cost:30, c:1},
+  {n:'枸杞紅棗茶包', p:50, cost:32, c:1},
   // 豆子與濾掛
   {n:'1包咖啡豆', p:500, c:2, g:'咖啡豆'},
   {n:'4包咖啡豆', p:1000, c:2, g:'咖啡豆'},
@@ -1000,7 +1062,7 @@ function acInput(store) {
   if (!matches.length) { drop.style.display = 'none'; return; }
   drop.innerHTML = matches.map((c, i) => `
     <div class="autocomplete-item" data-idx="${i}"
-      onmousedown="acSelect('${store}', ${i}, ${JSON.stringify(c).replace(/'/g, '\\x27')})"
+      onmousedown="event.preventDefault();acSelect('${store}', ${i}, ${JSON.stringify(c).replace(/'/g, '\\x27')})"
       onmouseover="acIndex.${store}=${i};acHighlight('${store}',${matches.length})">
       <div class="ac-name">${c.name}</div>
       <div class="ac-sub">${c.phone}${c.phone && c.delivery ? ' · ' : ''}${c.delivery}</div>
@@ -1038,9 +1100,12 @@ function acKey(e, store) {
 
 function acSelect(store, idx, customer) {
   if (typeof customer === 'string') customer = JSON.parse(customer);
-  document.getElementById(store + '-customer').value = customer.name;
+  const input = document.getElementById(store + '-customer');
+  input.value = customer.name;
+  input.dispatchEvent(new Event('input'));
   document.getElementById(store + '-ac-drop').style.display = 'none';
   acIndex[store] = -1;
+  toast('✓ ' + customer.name);
 }
 
 function acBlur(store) {
@@ -1064,7 +1129,7 @@ function acPuInput() {
   if (!matches.length) { drop.style.display = 'none'; return; }
   drop.innerHTML = matches.map((c, i) => `
     <div class="autocomplete-item" data-idx="${i}"
-      onmousedown="acPuSelect(${JSON.stringify(c).replace(/'/g, '\\x27')})"
+      onmousedown="event.preventDefault();acPuSelect(${JSON.stringify(c).replace(/'/g, '\\x27')})"
       onmouseover="acPuIdx=${i};acPuHighlight(${matches.length})">
       <div class="ac-name">${c.name}</div>
       <div class="ac-sub">${c.phone}${c.phone && c.address ? ' · ' : ''}${c.address ? c.address.substring(0,20)+'...' : ''}</div>
@@ -1309,6 +1374,16 @@ function renderPriceList(store, menu) {
     </div>`).join('');
 }
 
+
+// ═══ 新客勾選 ═══
+const newClientState = { muri: false, apple: false };
+
+function toggleNewClient(store) {
+  newClientState[store] = !newClientState[store];
+  const el = document.getElementById(store + '-new-check');
+  el.classList.toggle('checked', newClientState[store]);
+}
+
 // ═══ 初始化 ═══
 function init() {
   loadCustomers();
@@ -1427,6 +1502,7 @@ async function submitOrder(store) {
   const customer=document.getElementById(store+'-customer').value.trim();
   // 取得日期時間，沒填就用現在時間
   const dtInput = document.getElementById(store+'-datetime').value;
+  const isNew = newClientState[store];
   const orderTime = dtInput ? new Date(dtInput).toLocaleString('zh-TW',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}) : new Date().toLocaleString('zh-TW',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});
   const items=keys.map(i=>`${menu[i].n}×${cart[i]}`).join('、');
   const total=keys.reduce((s,i)=>s+menu[i].p*cart[i],0);
@@ -1434,7 +1510,7 @@ async function submitOrder(store) {
   btn.disabled=true;btn.textContent='送出中…';
   try {
     await fetch(GAS,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({type:'order',store,items,total,note,customer,orderTime})});
+      body:JSON.stringify({type:'order',store,items,total,note,customer,orderTime,isNew})});
     document.getElementById(store+'-ok').classList.add('show');
   } catch(e){toast('連線失敗，請重試');btn.disabled=false;btn.textContent=`送出訂單 $${total}`;}
 }
@@ -1442,6 +1518,8 @@ function resetOrder(store) {
   ST[store].cart={};
   document.getElementById(store+'-note').value='';
   document.getElementById(store+'-customer').value='';
+  newClientState[store]=false;
+  document.getElementById(store+'-new-check').classList.remove('checked');
   setDefaultDatetime(store);
   document.getElementById(store+'-ok').classList.remove('show');
   renderCart(store);
@@ -1472,7 +1550,7 @@ function renderOrders(store) {
   list.innerHTML=ords.map(o=>`
     <div class="order-card ${o.status==='完成'?'done':''}">
       <div class="oc-top">
-        <div><div class="oc-id">#${o.orderId}${o.customer?' ／ '+o.customer:''}</div><div class="oc-time">${o.orderTime||o.time}</div></div>
+        <div><div class="oc-id">#${o.orderId}${o.customer?' ／ '+o.customer:''}${o.isNew?' 🆕':''}</div><div class="oc-time">${o.orderTime||o.time}</div></div>
         <span class="sbadge ${o.status==='完成'?'sd':'sp'}">${o.status}</span>
       </div>
       <div class="oc-items">${o.items}</div>
@@ -1635,23 +1713,80 @@ function renderPurchases() {
 }
 
 // ═══ 報表 ═══
-function updateReport() {
-  ['muri','apple'].forEach(s=>{
-    const ords=orders[s]||[];
-    const pre=s==='muri'?'rm':'ra';
-    document.getElementById(pre+'c').textContent=ords.length+' 人';
-    document.getElementById(pre+'r').textContent='$'+ords.reduce((a,o)=>a+(parseInt(o.total)||0),0);
+function calcCost(items, menu) {
+  if (!items) return 0;
+  let total = 0;
+  items.split('、').forEach(part => {
+    const match = part.match(/^(.+?)×(\d+)$/);
+    if (!match) return;
+    const name = match[1].trim();
+    const qty = parseInt(match[2]) || 1;
+    const found = menu.find(m => m.n === name);
+    if (found && found.cost) total += found.cost * qty;
   });
-  const all=[...(orders.muri||[]),...(orders.apple||[])];
-  document.getElementById('rtc').textContent=all.length+' 人';
-  document.getElementById('rtr').textContent='$'+all.reduce((a,o)=>a+(parseInt(o.total)||0),0);
+  return Math.round(total);
+}
+
+function countItems(ordsList) {
+  const counts = {};
+  ordsList.forEach(o => {
+    if (!o.items) return;
+    o.items.split('、').forEach(part => {
+      const match = part.match(/^(.+?)×(\d+)$/);
+      if (!match) return;
+      const name = match[1].trim();
+      const qty = parseInt(match[2]) || 1;
+      counts[name] = (counts[name] || 0) + qty;
+    });
+  });
+  return counts;
+}
+
+function updateReport() {
+  const storeMap = { muri: { pre: 'rm', menu: muriMenu }, apple: { pre: 'ra', menu: appleMenu } };
+  let totalCnt=0, totalNew=0, totalRev=0, totalCost=0;
+
+  Object.entries(storeMap).forEach(([s, {pre, menu}]) => {
+    const ords = orders[s] || [];
+    const cnt = ords.length;
+    const newCnt = ords.filter(o => o.isNew).length;
+    const rev = ords.reduce((a,o) => a+(parseInt(o.total)||0), 0);
+    const cost = ords.reduce((a,o) => a + calcCost(o.items, menu), 0);
+    const profit = rev - cost;
+    const itemCounts = countItems(ords);
+
+    document.getElementById(pre+'c').textContent = cnt + ' 人';
+    document.getElementById(pre+'n').textContent = newCnt + ' 人';
+    document.getElementById(pre+'r').textContent = '$' + rev;
+    document.getElementById(pre+'co').textContent = '$' + cost;
+    document.getElementById(pre+'p2').textContent = '$' + profit;
+
+    const itemEl = document.getElementById((s==='muri'?'rm':'ra')+'-items');
+    const sorted = Object.entries(itemCounts).sort((a,b)=>b[1]-a[1]);
+    itemEl.innerHTML = sorted.map(([n,q]) => `<span style="margin-right:10px">${n} ×${q}</span>`).join('');
+
+    totalCnt += cnt; totalNew += newCnt; totalRev += rev; totalCost += cost;
+  });
+
+  document.getElementById('rtc').textContent = totalCnt + ' 人';
+  document.getElementById('rtn').textContent = totalNew + ' 人';
+  document.getElementById('rtr').textContent = '$' + totalRev;
+  document.getElementById('rtco').textContent = '$' + totalCost;
+  document.getElementById('rtpr').textContent = '$' + (totalRev - totalCost);
 }
 function copyReport() {
-  const mc=orders.muri?.length||0,mr=orders.muri?.reduce((a,o)=>a+(parseInt(o.total)||0),0)||0;
-  const ac=orders.apple?.length||0,ar=orders.apple?.reduce((a,o)=>a+(parseInt(o.total)||0),0)||0;
+  const mc=orders.muri?.length||0, mn=orders.muri?.filter(o=>o.isNew).length||0;
+  const mr=orders.muri?.reduce((a,o)=>a+(parseInt(o.total)||0),0)||0;
+  const mc2=orders.muri?.reduce((a,o)=>a+calcCost(o.items,muriMenu),0)||0;
+  const ac=orders.apple?.length||0, an=orders.apple?.filter(o=>o.isNew).length||0;
+  const ar=orders.apple?.reduce((a,o)=>a+(parseInt(o.total)||0),0)||0;
+  const ac2=orders.apple?.reduce((a,o)=>a+calcCost(o.items,appleMenu),0)||0;
   const d=new Date().toLocaleDateString('zh-TW');
-  navigator.clipboard.writeText(`📊 ${d} 營業報表\n⛰ 木日山：來客${mc}人 / 營收$${mr}\n🍎 景華街：來客${ac}人 / 營收$${ar}\n📌 合計：${mc+ac}人 / 營收$${mr+ar}`)
-    .then(()=>toast('✓ 已複製'));
+  const txt=`📊 ${d} 營業報表
+⛰ 木日山：來客${mc}人(新客${mn}) / 營收$${mr} / 成本$${mc2} / 毛利$${mr-mc2}
+🍎 景華街：來客${ac}人(新客${an}) / 營收$${ar} / 成本$${ac2} / 毛利$${ar-ac2}
+📌 合計：${mc+ac}人(新客${mn+an}) / 營收$${mr+ar} / 成本$${mc2+ac2} / 毛利$${mr+ar-mc2-ac2}`;
+  navigator.clipboard.writeText(txt).then(()=>toast('✓ 已複製'));
 }
 
 // ═══ 頁面切換 ═══
