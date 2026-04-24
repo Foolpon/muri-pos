@@ -1,0 +1,1277 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>木日山 × 蘋果咖啡</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
+
+:root {
+  --muri-primary: #c8a96a;
+  --muri-light: #e8c888;
+  --muri-bg: #1a1610;
+  --apple-primary: #6aaa88;
+  --apple-light: #88ccaa;
+  --apple-bg: #101a14;
+  --bg: #111318;
+  --surface: #1a1e24;
+  --border: #2a2820;
+  --text: #f0ece0;
+  --text2: #8a8070;
+  --text3: #4a4438;
+  --green: #5aaa70;
+  --serif: 'Noto Serif TC', serif;
+  --mono: 'DM Mono', monospace;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+body { font-family: var(--serif); background: var(--bg); color: var(--text); min-height: 100vh; }
+
+/* ═══ 主導覽 ═══ */
+.main-nav {
+  position: fixed; top: 0; left: 0; right: 0; height: 50px;
+  background: rgba(17,19,24,0.97); border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(10px); z-index: 1000;
+  display: flex; align-items: stretch;
+}
+.nav-logo { padding: 0 12px; display: flex; align-items: center; font-size: 13px; color: var(--text2); border-right: 1px solid var(--border); white-space: nowrap; }
+.nav-tabs { display: flex; flex: 1; overflow-x: auto; scrollbar-width: none; }
+.nav-tabs::-webkit-scrollbar { display: none; }
+.nav-tab {
+  flex-shrink: 0; padding: 0 12px; display: flex; align-items: center; gap: 5px;
+  font-size: 11px; color: var(--text3); cursor: pointer;
+  border-bottom: 2px solid transparent; transition: all 0.2s; white-space: nowrap;
+}
+.nav-tab.am { color: var(--muri-primary); border-bottom-color: var(--muri-primary); }
+.nav-tab.aa { color: var(--apple-primary); border-bottom-color: var(--apple-primary); }
+.nav-tab.ar { color: #888; border-bottom-color: #888; }
+.nav-tab.ap { color: #a080c8; border-bottom-color: #a080c8; }
+.dot { width: 6px; height: 6px; border-radius: 50%; }
+.dm { background: var(--muri-primary); }
+.da { background: var(--apple-primary); }
+.dr { background: #666; }
+.dp { background: #a080c8; }
+
+/* ═══ 頁面 ═══ */
+.page { display: none; padding-top: 50px; min-height: 100vh; }
+.page.active { display: block; }
+
+/* ═══ 點餐頁 header ═══ */
+.order-header { padding: 14px 14px 10px; text-align: center; border-bottom: 1px solid var(--border); }
+.store-name { font-size: 19px; font-weight: 700; letter-spacing: 0.05em; margin-bottom: 3px; }
+.store-sub { font-size: 11px; color: var(--text3); }
+
+/* ═══ 三頁籤 ═══ */
+.tab-row {
+  display: flex; border-bottom: 1px solid var(--border);
+  position: sticky; top: 50px; z-index: 10; background: inherit;
+}
+.tab-btn {
+  flex: 1; padding: 10px 4px; text-align: center;
+  font-size: 12px; color: var(--text3); cursor: pointer;
+  border-bottom: 2px solid transparent; transition: all 0.15s;
+}
+.muri-pg .tab-btn.active { color: var(--muri-primary); border-bottom-color: var(--muri-primary); }
+.apple-pg .tab-btn.active { color: var(--apple-primary); border-bottom-color: var(--apple-primary); }
+
+/* ═══ 商品格 — 兩欄（飲料用）═══ */
+.items-grid-2 {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 1px; background: var(--border);
+}
+/* ═══ 商品格 — 一欄（甜點用）═══ */
+.items-grid-1 {
+  display: grid; grid-template-columns: 1fr;
+  gap: 1px; background: var(--border);
+}
+/* ═══ 商品格 — 三欄（豆子濾掛用）═══ */
+.items-grid-3 {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 1px; background: var(--border);
+}
+
+/* 分類小標題 */
+.cat-label {
+  grid-column: 1 / -1;
+  padding: 8px 12px; font-size: 10px; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  background: var(--bg); color: var(--text3);
+  border-top: 1px solid var(--border);
+}
+
+.item-card {
+  background: var(--surface); padding: 14px 8px 12px;
+  text-align: center; cursor: pointer; position: relative;
+  transition: background 0.1s; user-select: none;
+}
+.item-card:active { transform: scale(0.96); background: #222; }
+.item-name { font-size: 12px; line-height: 1.4; margin-bottom: 4px; color: var(--text); }
+/* 一欄時item排版 */
+.items-grid-1 .item-card {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 13px 16px; text-align: left;
+}
+.items-grid-1 .item-name { margin-bottom: 0; flex: 1; }
+.item-price { font-family: var(--mono); font-size: 12px; }
+.muri-pg .item-price { color: var(--muri-primary); }
+.apple-pg .item-price { color: var(--apple-primary); }
+.qty-badge {
+  position: absolute; top: 3px; right: 3px;
+  width: 17px; height: 17px; border-radius: 50%;
+  font-family: var(--mono); font-size: 9px; font-weight: 700;
+  display: none; align-items: center; justify-content: center; color: #111;
+}
+.items-grid-1 .qty-badge { top: 50%; transform: translateY(-50%); right: 44px; }
+.muri-pg .qty-badge { background: var(--muri-primary); }
+.apple-pg .qty-badge { background: var(--apple-primary); }
+.item-card.hq .qty-badge { display: flex; }
+
+/* ═══ 備註 ═══ */
+.note-row {
+  padding: 9px 14px; display: flex; gap: 8px; align-items: center;
+  border-top: 1px solid var(--border);
+}
+.note-label { font-size: 11px; color: var(--text3); white-space: nowrap; }
+.note-input {
+  flex: 1; background: var(--surface); border: 1px solid var(--border);
+  border-radius: 6px; padding: 6px 10px; color: var(--text);
+  font-family: var(--serif); font-size: 12px; outline: none;
+}
+.muri-pg .note-input:focus { border-color: var(--muri-primary); }
+.apple-pg .note-input:focus { border-color: var(--apple-primary); }
+
+/* ═══ 購物車 ═══ */
+.cart-wrap { padding: 8px 14px; }
+.cart-lbl { font-size: 10px; color: var(--text3); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 5px; }
+.cart-item {
+  display: flex; align-items: center; gap: 7px;
+  padding: 7px 10px; background: var(--surface); border-radius: 6px; margin-bottom: 3px;
+}
+.ci-name { flex: 1; font-size: 12px; }
+.qc { display: flex; align-items: center; gap: 4px; }
+.qb {
+  width: 23px; height: 23px; border-radius: 4px;
+  border: 1px solid var(--border); background: var(--bg);
+  color: var(--text2); font-size: 13px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.muri-pg .qb:active { background: var(--muri-primary); color: #111; }
+.apple-pg .qb:active { background: var(--apple-primary); color: #111; }
+.qn { font-family: var(--mono); font-size: 12px; min-width: 18px; text-align: center; }
+.ci-sub { font-family: var(--mono); font-size: 11px; min-width: 42px; text-align: right; }
+.muri-pg .ci-sub { color: var(--muri-primary); }
+.apple-pg .ci-sub { color: var(--apple-primary); }
+
+.total-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 14px; margin: 3px 0;
+}
+.total-lbl { font-size: 13px; color: var(--text2); }
+.total-amt { font-family: var(--mono); font-size: 22px; font-weight: 700; }
+.muri-pg .total-amt { color: var(--muri-light); }
+.apple-pg .total-amt { color: var(--apple-light); }
+
+.submit-btn {
+  margin: 4px 14px 20px; width: calc(100% - 28px);
+  padding: 14px; border: none; border-radius: 10px;
+  font-family: var(--serif); font-size: 15px; font-weight: 700;
+  cursor: pointer; letter-spacing: 0.08em; transition: all 0.15s;
+}
+.muri-pg .submit-btn { background: var(--muri-primary); color: #1a1610; }
+.apple-pg .submit-btn { background: var(--apple-primary); color: #101a14; }
+.submit-btn:disabled { background: var(--border); color: var(--text3); cursor: not-allowed; }
+
+/* ═══ 成功畫面 ═══ */
+.success-screen {
+  display: none; position: fixed; inset: 0;
+  background: rgba(8,8,8,0.96); z-index: 2000;
+  flex-direction: column; align-items: center; justify-content: center;
+  gap: 14px; text-align: center;
+}
+.success-screen.show { display: flex; }
+.s-icon { font-size: 60px; }
+.s-msg { font-size: 22px; font-weight: 700; }
+.s-sub { font-size: 13px; color: var(--text2); }
+.s-back {
+  margin-top: 12px; padding: 11px 30px; border-radius: 8px;
+  border: none; font-family: var(--serif); font-size: 14px; font-weight: 700; cursor: pointer;
+}
+.muri-pg .s-back { background: var(--muri-primary); color: #111; }
+.apple-pg .s-back { background: var(--apple-primary); color: #111; }
+
+/* ═══ 後台 ═══ */
+.admin-header {
+  padding: 12px 14px; display: flex; justify-content: space-between; align-items: center;
+  border-bottom: 1px solid var(--border); position: sticky; top: 50px; z-index: 10; background: var(--bg);
+}
+.admin-title { font-size: 14px; font-weight: 700; }
+.stats { display: flex; gap: 8px; align-items: center; }
+.stat-pill { font-family: var(--mono); font-size: 11px; padding: 3px 9px; border-radius: 20px; background: var(--surface); }
+.muri-admin .stat-pill span { color: var(--muri-primary); }
+.apple-admin .stat-pill span { color: var(--apple-primary); }
+.refresh-btn {
+  padding: 5px 11px; border-radius: 6px; border: 1px solid var(--border);
+  background: transparent; color: var(--text2); font-size: 11px; cursor: pointer; font-family: var(--serif);
+}
+.orders-list { padding: 8px 14px; }
+.order-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 8px; padding: 11px 13px; margin-bottom: 7px;
+}
+.order-card.done { opacity: 0.45; }
+.oc-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 5px; }
+.oc-id { font-family: var(--mono); font-size: 10px; color: var(--text3); }
+.oc-time { font-family: var(--mono); font-size: 11px; color: var(--text2); }
+.oc-items { font-size: 12px; color: var(--text); line-height: 1.6; margin-bottom: 7px; }
+.oc-bottom { display: flex; justify-content: space-between; align-items: center; }
+.oc-total { font-family: var(--mono); font-size: 16px; font-weight: 700; }
+.muri-admin .oc-total { color: var(--muri-primary); }
+.apple-admin .oc-total { color: var(--apple-primary); }
+.oc-note { font-size: 11px; color: var(--text3); font-style: italic; }
+.done-btn {
+  padding: 5px 13px; border-radius: 6px; border: none;
+  font-family: var(--serif); font-size: 12px; font-weight: 700; cursor: pointer;
+}
+.muri-admin .done-btn { background: var(--muri-primary); color: #111; }
+.apple-admin .done-btn { background: var(--apple-primary); color: #111; }
+.done-btn.completed { background: var(--border); color: var(--text3); cursor: default; }
+.sbadge { font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 700; }
+.sp { background: #3a2a10; color: #e8a040; }
+.sd { background: #1a2a1a; color: #5aaa70; }
+.empty-msg { text-align: center; padding: 40px 20px; color: var(--text3); font-size: 13px; }
+.loading-msg { text-align: center; padding: 20px; color: var(--text3); font-size: 12px; }
+.quick-btn {
+  position: fixed; bottom: 20px; right: 16px;
+  width: 50px; height: 50px; border-radius: 50%; border: none;
+  font-size: 22px; cursor: pointer; box-shadow: 0 4px 16px rgba(0,0,0,0.4); z-index: 100;
+}
+.muri-admin .quick-btn { background: var(--muri-primary); color: #111; }
+.apple-admin .quick-btn { background: var(--apple-primary); color: #111; }
+
+/* ═══ 訂購單頁面 ═══ */
+.purchase-page { padding: 14px 14px 40px; }
+.pu-header { margin-bottom: 16px; }
+.pu-title { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+.pu-sub { font-size: 12px; color: var(--text3); }
+
+.pu-section { margin-bottom: 20px; }
+.pu-section-title {
+  font-size: 13px; font-weight: 700; color: #a080c8;
+  padding-bottom: 8px; margin-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+  letter-spacing: 0.05em;
+}
+
+/* 客戶資料欄位 */
+.field-row { margin-bottom: 10px; }
+.field-label { font-size: 11px; color: var(--text2); margin-bottom: 4px; display: block; }
+.field-input {
+  width: 100%; background: var(--surface); border: 1px solid var(--border);
+  border-radius: 6px; padding: 9px 12px; color: var(--text);
+  font-family: var(--serif); font-size: 13px; outline: none;
+}
+.field-input:focus { border-color: #a080c8; }
+
+/* 來源／發貨 選項 */
+.option-group { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+.option-btn {
+  padding: 6px 12px; border-radius: 6px;
+  border: 1px solid var(--border); background: var(--surface);
+  color: var(--text2); font-size: 12px; cursor: pointer;
+  font-family: var(--serif); transition: all 0.15s;
+}
+.option-btn.selected { background: #a080c8; border-color: #a080c8; color: #111; font-weight: 700; }
+
+/* 品項勾選 */
+.bean-list { display: flex; flex-direction: column; gap: 4px; }
+.bean-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; background: var(--surface);
+  border-radius: 6px; border: 1px solid var(--border);
+  cursor: pointer; transition: border-color 0.15s;
+}
+.bean-item.checked { border-color: #a080c8; background: #1a1624; }
+.bean-check {
+  width: 18px; height: 18px; border-radius: 4px;
+  border: 2px solid var(--border); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+}
+.bean-item.checked .bean-check { background: #a080c8; border-color: #a080c8; }
+.bean-check::after { content: '✓'; font-size: 11px; color: #111; display: none; }
+.bean-item.checked .bean-check::after { display: block; }
+.bean-name { font-size: 12px; flex: 1; line-height: 1.4; }
+
+/* 數量選擇 */
+.bean-qty {
+  display: flex; align-items: center; gap: 6px;
+  opacity: 0; pointer-events: none; transition: opacity 0.15s;
+}
+.bean-item.checked .bean-qty { opacity: 1; pointer-events: auto; }
+.bqb {
+  width: 24px; height: 24px; border-radius: 4px;
+  border: 1px solid var(--border); background: var(--bg);
+  color: var(--text2); font-size: 13px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.bqb:active { background: #a080c8; color: #111; }
+.bqn { font-family: var(--mono); font-size: 12px; min-width: 16px; text-align: center; color: var(--text); }
+
+/* 載入中 */
+.loading-items { padding: 20px; text-align: center; color: var(--text3); font-size: 12px; }
+
+/* 送出按鈕（訂購單） */
+.pu-submit {
+  width: 100%; padding: 14px; border: none; border-radius: 10px;
+  background: #a080c8; color: #111;
+  font-family: var(--serif); font-size: 15px; font-weight: 700;
+  cursor: pointer; letter-spacing: 0.08em; margin-top: 8px;
+}
+.pu-submit:disabled { background: var(--border); color: var(--text3); cursor: not-allowed; }
+.pu-submit:active { background: #b898e0; }
+
+/* 訂購單後台 */
+.pu-order-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 8px; padding: 12px 14px; margin-bottom: 8px;
+}
+.pu-order-card.done { opacity: 0.45; }
+.pu-oc-name { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+.pu-oc-meta { font-size: 11px; color: var(--text3); margin-bottom: 8px; font-family: var(--mono); }
+.pu-oc-section { margin-bottom: 6px; }
+.pu-oc-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 3px; }
+.pu-oc-content { font-size: 12px; color: var(--text); line-height: 1.6; }
+
+/* ═══ 報表 ═══ */
+.report-wrap { padding: 14px 14px 30px; }
+.report-date-txt { font-size: 11px; color: var(--text3); font-family: var(--mono); margin-bottom: 4px; }
+.report-title { font-size: 20px; font-weight: 700; margin-bottom: 14px; }
+.rcard { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 13px 15px; margin-bottom: 9px; }
+.rcard-title { font-size: 13px; font-weight: 700; padding-bottom: 9px; margin-bottom: 9px; border-bottom: 1px solid var(--border); }
+.rrow { display: flex; justify-content: space-between; font-size: 12px; color: var(--text2); margin-bottom: 5px; }
+.rrow .rv { font-family: var(--mono); color: var(--text); }
+.rrow.hl { margin-top: 7px; padding-top: 7px; border-top: 1px solid var(--border); }
+.rrow.hl .rl { font-weight: 700; color: var(--text); }
+.rrow.hl .rv { color: var(--green); font-size: 15px; font-weight: 700; }
+.copy-btn { width: 100%; padding: 12px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; color: var(--text2); font-family: var(--serif); font-size: 13px; cursor: pointer; }
+
+/* Toast */
+.toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+  background: var(--green); color: #111; padding: 7px 18px;
+  border-radius: 20px; font-size: 12px; font-weight: 700;
+  opacity: 0; transition: opacity 0.25s; z-index: 9999; white-space: nowrap; pointer-events: none;
+}
+.toast.show { opacity: 1; }
+
+/* ═══ 自動完成下拉 ═══ */
+.autocomplete-wrap { position: relative; flex: 1; margin-right: 6px; }
+.autocomplete-dropdown {
+  position: absolute; top: 100%; left: 0; right: 0; z-index: 500;
+  background: #1a1e24; border: 1px solid #3a3828;
+  border-top: none; border-radius: 0 0 8px 8px;
+  max-height: 200px; overflow-y: auto;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+}
+.autocomplete-item {
+  padding: 9px 12px; cursor: pointer;
+  border-bottom: 1px solid #2a2820; transition: background 0.1s;
+}
+.autocomplete-item:last-child { border-bottom: none; }
+.autocomplete-item:hover, .autocomplete-item.active { background: #2a2820; }
+.ac-name { font-size: 13px; color: #f0ece0; }
+.ac-sub { font-size: 10px; color: #6a6058; margin-top: 2px; }
+
+/* ═══ 日期時間列 ═══ */
+.datetime-row {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--border);
+  background: inherit;
+}
+.dt-label { font-size: 11px; color: var(--text3); white-space: nowrap; }
+.dt-input {
+  flex: 1; background: var(--surface); border: 1px solid var(--border);
+  border-radius: 6px; padding: 6px 10px; color: var(--text);
+  font-family: var(--mono); font-size: 12px; outline: none;
+  min-width: 0;
+}
+.muri-pg .dt-input:focus { border-color: var(--muri-primary); }
+.apple-pg .dt-input:focus { border-color: var(--apple-primary); }
+
+/* ═══ 客人列（移到上方）═══ */
+.customer-top-row {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--border);
+  background: inherit;
+}
+</style>
+</head>
+<body>
+
+<nav class="main-nav">
+  <div class="nav-logo">☕</div>
+  <div class="nav-tabs">
+    <div class="nav-tab" id="t-mo" onclick="go('mo')"><span class="dot dm"></span>木日山｜點餐</div>
+    <div class="nav-tab" id="t-ma" onclick="go('ma')"><span class="dot dm"></span>木日山｜後台</div>
+    <div class="nav-tab" id="t-ao" onclick="go('ao')"><span class="dot da"></span>景華街｜點餐</div>
+    <div class="nav-tab" id="t-aa" onclick="go('aa')"><span class="dot da"></span>景華街｜後台</div>
+    <div class="nav-tab" id="t-pu" onclick="go('pu')"><span class="dot dp"></span>線上訂購</div>
+    <div class="nav-tab" id="t-pa" onclick="go('pa')"><span class="dot dp"></span>訂購後台</div>
+    <div class="nav-tab" id="t-rp" onclick="go('rp')"><span class="dot dr"></span>匯總報表</div>
+  </div>
+</nav>
+
+<!-- 木日山｜點餐 -->
+<div class="page muri-pg" id="p-mo">
+  <div class="order-header" style="background:var(--muri-bg)">
+    <div class="store-name" style="color:var(--muri-light)">⛰ 木日山咖啡</div>
+    <div class="store-sub">請選擇品項</div>
+  </div>
+  <!-- 客人稱呼（移到品項上方） -->
+  <div class="customer-top-row" style="background:var(--muri-bg)">
+    <span class="dt-label">客人</span>
+    <div class="autocomplete-wrap" style="flex:1;margin-right:0">
+      <input class="dt-input" id="muri-customer" placeholder="稱呼（選填）" autocomplete="off"
+        oninput="acInput('muri')" onblur="acBlur('muri')" onkeydown="acKey(event,'muri')">
+      <div class="autocomplete-dropdown" id="muri-ac-drop" style="display:none"></div>
+    </div>
+  </div>
+  <!-- 日期時間 -->
+  <div class="datetime-row" style="background:var(--muri-bg)">
+    <span class="dt-label">日期時間</span>
+    <input class="dt-input" id="muri-datetime" type="datetime-local" style="flex:1">
+  </div>
+  <div class="tab-row" id="muri-tabrow" style="background:var(--muri-bg)">
+    <div class="tab-btn active" onclick="switchTab('muri',0)">☕ 飲料</div>
+    <div class="tab-btn" onclick="switchTab('muri',1)">🍰 甜點</div>
+    <div class="tab-btn" onclick="switchTab('muri',2)">📦 豆子與濾掛</div>
+  </div>
+  <div id="muri-grid"></div>
+  <div class="note-row" style="background:var(--muri-bg)">
+    <span class="note-label">備註</span>
+    <input class="note-input" id="muri-note" placeholder="特殊需求、冰量…">
+  </div>
+  <div id="muri-cart-wrap" style="display:none">
+    <div class="cart-wrap">
+      <div class="cart-lbl">您的訂單</div>
+      <div id="muri-cart-list"></div>
+      <div class="total-row">
+        <span class="total-lbl">合計</span>
+        <span class="total-amt" id="muri-total">$0</span>
+      </div>
+    </div>
+  </div>
+  <button class="submit-btn" id="muri-sub" onclick="submitOrder('muri')" disabled>請選擇品項</button>
+  <div class="success-screen muri-pg" id="muri-ok">
+    <div class="s-icon">✓</div>
+    <div class="s-msg" style="color:var(--muri-light)">訂單已送出！</div>
+    <div class="s-sub">請稍候，我們正在為您準備</div>
+    <button class="s-back" onclick="resetOrder('muri')">繼續點餐</button>
+  </div>
+</div>
+
+<!-- 木日山｜後台 -->
+<div class="page muri-admin" id="p-ma">
+  <div class="admin-header">
+    <div class="admin-title" style="color:var(--muri-primary)">⛰ 木日山後台</div>
+    <div class="stats">
+      <div class="stat-pill">來客 <span id="mc">0</span></div>
+      <div class="stat-pill">$<span id="mr">0</span></div>
+      <button class="refresh-btn" onclick="loadOrders('muri')">↻ 刷新</button>
+    </div>
+  </div>
+  <div class="orders-list" id="muri-orders"></div>
+  <button class="quick-btn muri-admin" onclick="go('mo')">＋</button>
+</div>
+
+<!-- 景華街｜點餐 -->
+<div class="page apple-pg" id="p-ao">
+  <div class="order-header" style="background:var(--apple-bg)">
+    <div class="store-name" style="color:var(--apple-light)">🍎 蘋果咖啡 景華街</div>
+    <div class="store-sub">請選擇品項</div>
+  </div>
+  <!-- 客人稱呼 -->
+  <div class="customer-top-row" style="background:var(--apple-bg)">
+    <span class="dt-label">客人</span>
+    <div class="autocomplete-wrap" style="flex:1;margin-right:0">
+      <input class="dt-input" id="apple-customer" placeholder="稱呼（選填）" autocomplete="off"
+        oninput="acInput('apple')" onblur="acBlur('apple')" onkeydown="acKey(event,'apple')">
+      <div class="autocomplete-dropdown" id="apple-ac-drop" style="display:none"></div>
+    </div>
+  </div>
+  <!-- 日期時間 -->
+  <div class="datetime-row" style="background:var(--apple-bg)">
+    <span class="dt-label">日期時間</span>
+    <input class="dt-input" id="apple-datetime" type="datetime-local" style="flex:1">
+  </div>
+  <div class="tab-row" id="apple-tabrow" style="background:var(--apple-bg)">
+    <div class="tab-btn active" onclick="switchTab('apple',0)">☕ 飲料</div>
+    <div class="tab-btn" onclick="switchTab('apple',1)">🍰 甜點</div>
+    <div class="tab-btn" onclick="switchTab('apple',2)">📦 豆子與濾掛</div>
+  </div>
+  <div id="apple-grid"></div>
+  <div class="note-row" style="background:var(--apple-bg)">
+    <span class="note-label">備註</span>
+    <input class="note-input" id="apple-note" placeholder="特殊需求、冰量…">
+  </div>
+  <div id="apple-cart-wrap" style="display:none">
+    <div class="cart-wrap">
+      <div class="cart-lbl">您的訂單</div>
+      <div id="apple-cart-list"></div>
+      <div class="total-row">
+        <span class="total-lbl">合計</span>
+        <span class="total-amt" id="apple-total">$0</span>
+      </div>
+    </div>
+  </div>
+  <button class="submit-btn" id="apple-sub" onclick="submitOrder('apple')" disabled>請選擇品項</button>
+  <div class="success-screen apple-pg" id="apple-ok">
+    <div class="s-icon">✓</div>
+    <div class="s-msg" style="color:var(--apple-light)">訂單已送出！</div>
+    <div class="s-sub">請稍候，我們正在為您準備</div>
+    <button class="s-back" onclick="resetOrder('apple')">繼續點餐</button>
+  </div>
+</div>
+
+<!-- 景華街｜後台 -->
+<div class="page apple-admin" id="p-aa">
+  <div class="admin-header">
+    <div class="admin-title" style="color:var(--apple-primary)">🍎 景華街後台</div>
+    <div class="stats">
+      <div class="stat-pill">來客 <span id="ac">0</span></div>
+      <div class="stat-pill">$<span id="ar">0</span></div>
+      <button class="refresh-btn" onclick="loadOrders('apple')">↻ 刷新</button>
+    </div>
+  </div>
+  <div class="orders-list" id="apple-orders"></div>
+  <button class="quick-btn apple-admin" onclick="go('ao')">＋</button>
+</div>
+
+<!-- 線上訂購 -->
+<div class="page" id="p-pu">
+  <div class="purchase-page">
+    <div class="pu-header">
+      <div class="pu-title">🛒 線上訂購</div>
+      <div class="pu-sub">填寫資料後送出，我們會盡快與您確認</div>
+    </div>
+
+    <!-- 客戶資料 -->
+    <div class="pu-section">
+      <div class="pu-section-title">客戶資料</div>
+      <div class="field-row">
+        <label class="field-label">姓名 *</label>
+        <div style="position:relative">
+        <input class="field-input" id="pu-name" placeholder="您的姓名" autocomplete="off"
+          oninput="acPuInput()" onblur="acPuBlur()" onkeydown="acPuKey(event)">
+        <div class="autocomplete-dropdown" id="pu-ac-drop" style="display:none; border-radius:0 0 8px 8px;"></div>
+      </div>
+      </div>
+      <div class="field-row">
+        <label class="field-label">電話 *</label>
+        <input class="field-input" id="pu-phone" type="tel" placeholder="0912-345-678">
+      </div>
+      <div class="field-row">
+        <label class="field-label">地址（宅配必填）</label>
+        <input class="field-input" id="pu-address" placeholder="縣市＋路名＋門號">
+      </div>
+    </div>
+
+    <!-- 來源 -->
+    <div class="pu-section">
+      <div class="pu-section-title">從哪裡找到我們</div>
+      <div class="option-group" id="source-group">
+        <div class="option-btn" onclick="selectOption('source',this)">現場</div>
+        <div class="option-btn" onclick="selectOption('source',this)">臉書</div>
+        <div class="option-btn" onclick="selectOption('source',this)">LINE</div>
+        <div class="option-btn" onclick="selectOption('source',this)">LINE@</div>
+        <div class="option-btn" onclick="selectOption('source',this)">蝦皮</div>
+        <div class="option-btn" onclick="selectOption('source',this)">其他</div>
+      </div>
+    </div>
+
+    <!-- 發貨方式 -->
+    <div class="pu-section">
+      <div class="pu-section-title">發貨方式</div>
+      <div class="option-group" id="delivery-group">
+        <div class="option-btn" onclick="selectOption('delivery',this)">現取</div>
+        <div class="option-btn" onclick="selectOption('delivery',this)">郵局宅配</div>
+        <div class="option-btn" onclick="selectOption('delivery',this)">7-11 店到店</div>
+        <div class="option-btn" onclick="selectOption('delivery',this)">全家 店到店</div>
+      </div>
+    </div>
+
+    <!-- 豆子 -->
+    <div class="pu-section">
+      <div class="pu-section-title">☕ 咖啡豆（任選4包1000元）</div>
+      <div class="bean-list" id="bean-list">
+        <div class="loading-items">載入豆單中…</div>
+      </div>
+    </div>
+
+    <!-- 濾掛 -->
+    <div class="pu-section">
+      <div class="pu-section-title">🎁 濾掛咖啡（單包45元 / 5包160元 / 25包690元）</div>
+      <div class="bean-list" id="filter-list">
+        <div class="loading-items">載入濾掛清單中…</div>
+      </div>
+    </div>
+
+    <!-- 備註 -->
+    <div class="pu-section">
+      <div class="pu-section-title">備註</div>
+      <textarea class="field-input" id="pu-note" rows="3" placeholder="特殊需求、指定門市名稱…" style="resize:vertical"></textarea>
+    </div>
+
+    <button class="pu-submit" id="pu-submit" onclick="submitPurchase()">送出訂購</button>
+
+    <div class="success-screen" id="pu-ok" style="--accent:#a080c8">
+      <div class="s-icon">✓</div>
+      <div class="s-msg" style="color:#b898e0">訂購成功！</div>
+      <div class="s-sub">我們收到您的訂單，會盡快聯絡您確認</div>
+      <button class="s-back" style="background:#a080c8;color:#111" onclick="resetPurchase()">再次訂購</button>
+    </div>
+  </div>
+</div>
+
+<!-- 訂購後台 -->
+<div class="page" id="p-pa">
+  <div class="admin-header" style="background:var(--bg)">
+    <div class="admin-title" style="color:#a080c8">🛒 訂購後台</div>
+    <div class="stats">
+      <div class="stat-pill" style="color:#a080c8">待處理 <span id="pac" style="color:#a080c8">0</span></div>
+      <button class="refresh-btn" onclick="loadPurchases()">↻ 刷新</button>
+    </div>
+  </div>
+  <div class="orders-list" id="pu-orders"></div>
+</div>
+
+<!-- 匯總報表 -->
+<div class="page" id="p-rp">
+  <div class="report-wrap">
+    <div class="report-date-txt" id="rdate"></div>
+    <div class="report-title">📊 今日匯總報表</div>
+    <div class="rcard">
+      <div class="rcard-title" style="color:var(--muri-primary)">⛰ 木日山</div>
+      <div class="rrow"><span class="rl">來客數</span><span class="rv" id="rmc">—</span></div>
+      <div class="rrow hl"><span class="rl">總營業額</span><span class="rv" id="rmr">—</span></div>
+    </div>
+    <div class="rcard">
+      <div class="rcard-title" style="color:var(--apple-primary)">🍎 景華街</div>
+      <div class="rrow"><span class="rl">來客數</span><span class="rv" id="rac">—</span></div>
+      <div class="rrow hl"><span class="rl">總營業額</span><span class="rv" id="rar">—</span></div>
+    </div>
+    <div class="rcard">
+      <div class="rcard-title" style="color:#888">📌 兩店合計</div>
+      <div class="rrow"><span class="rl">總來客數</span><span class="rv" id="rtc">—</span></div>
+      <div class="rrow hl"><span class="rl">總營業額</span><span class="rv" id="rtr">—</span></div>
+    </div>
+    <button class="copy-btn" onclick="copyReport()">📋 複製報表文字</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const GAS = 'https://script.google.com/macros/s/AKfycbzbXgDEDko0WVe8khVzPPmOL6dsZ_OT2LJfh6iy_RiezPREg_l1RE8bKwz4SYjjeJj3vQ/exec';
+
+// ═══════════════════════════════════════
+// 可修改區域：點餐菜單資料
+// cat: 0=飲料, 1=甜點, 2=豆子與濾掛
+// group: 豆子與濾掛分類標題（cat=2時有效）
+// ═══════════════════════════════════════
+
+const muriMenu = [
+  // 飲料
+  {n:'蘋果咖啡 M', p:110, c:0}, {n:'蘋果咖啡 L', p:140, c:0},
+  {n:'咖啡拿鐵 M', p:90, c:0}, {n:'咖啡拿鐵 L', p:100, c:0},
+  {n:'美式咖啡 M', p:70, c:0}, {n:'美式咖啡 L', p:80, c:0},
+  {n:'手沖咖啡', p:150, c:0},
+  {n:'蘋果汁 M', p:100, c:0}, {n:'蘋果汁 L', p:120, c:0},
+  {n:'蘋果拿鐵 M', p:110, c:0}, {n:'蘋果拿鐵 L', p:140, c:0},
+  {n:'蘋果紅茶 M', p:110, c:0}, {n:'蘋果紅茶 L', p:130, c:0},
+  {n:'蘋果牛奶 M', p:100, c:0}, {n:'蘋果牛奶 L', p:120, c:0},
+  {n:'檸檬咖啡 M', p:110, c:0}, {n:'檸檬咖啡 L', p:120, c:0},
+  {n:'卡布奇諾 M', p:90, c:0}, {n:'卡布奇諾 L', p:100, c:0},
+  {n:'多份濃縮', p:30, c:0}, {n:'風味糖漿', p:30, c:0},
+  // 甜點（含枸杞紅棗茶包）
+  {n:'雞蛋糕', p:60, c:1}, {n:'小司康', p:50, c:1},
+  {n:'手工焦糖布丁', p:50, c:1}, {n:'瑪德蓮', p:50, c:1},
+  {n:'黑糖核桃肉桂捲', p:50, c:1},
+  {n:'鳳梨乾', p:30, c:1}, {n:'檸檬乾', p:50, c:1},
+  {n:'枸杞紅棗茶包', p:50, c:1},
+  // 豆子與濾掛（含分類）
+  {n:'1包咖啡豆', p:500, c:2, g:'咖啡豆'},
+  {n:'4包咖啡豆', p:1000, c:2, g:'咖啡豆'},
+  {n:'1包濾掛', p:45, c:2, g:'濾掛咖啡'},
+  {n:'5包濾掛', p:160, c:2, g:'濾掛咖啡'},
+  {n:'25包濾掛', p:690, c:2, g:'濾掛咖啡'},
+  {n:'5包濾掛禮盒', p:200, c:2, g:'濾掛禮盒'},
+  {n:'15包濾掛禮盒', p:500, c:2, g:'濾掛禮盒'},
+  {n:'25包濾掛禮盒', p:750, c:2, g:'濾掛禮盒'},
+  {n:'鮮乳', p:70, c:2, g:'其他'},
+  {n:'自製優格', p:200, c:2, g:'其他'},
+];
+
+const appleMenu = [
+  // 飲料
+  {n:'手沖咖啡', p:150, c:0},
+  {n:'美式咖啡 S', p:50, c:0}, {n:'美式咖啡 M', p:60, c:0},
+  {n:'咖啡拿鐵 S', p:65, c:0}, {n:'咖啡拿鐵 M', p:80, c:0},
+  {n:'香草拿鐵 S', p:75, c:0}, {n:'香草拿鐵 M', p:90, c:0},
+  {n:'蘋果咖啡 M', p:100, c:0},
+  {n:'蘋果汁 M', p:100, c:0},
+  {n:'多份濃縮', p:30, c:0}, {n:'風味糖漿', p:30, c:0},
+  // 甜點
+  {n:'雞蛋糕', p:60, c:1}, {n:'小司康', p:50, c:1},
+  {n:'手工焦糖布丁', p:50, c:1}, {n:'瑪德蓮', p:50, c:1},
+  {n:'黑糖核桃肉桂捲', p:50, c:1},
+  {n:'鳳梨乾', p:30, c:1}, {n:'檸檬乾', p:50, c:1},
+  {n:'枸杞紅棗茶包', p:50, c:1},
+  // 豆子與濾掛
+  {n:'1包咖啡豆', p:500, c:2, g:'咖啡豆'},
+  {n:'4包咖啡豆', p:1000, c:2, g:'咖啡豆'},
+  {n:'1包濾掛', p:45, c:2, g:'濾掛咖啡'},
+  {n:'5包濾掛', p:160, c:2, g:'濾掛咖啡'},
+  {n:'25包濾掛', p:690, c:2, g:'濾掛咖啡'},
+  {n:'5包濾掛禮盒', p:200, c:2, g:'濾掛禮盒'},
+  {n:'15包濾掛禮盒', p:500, c:2, g:'濾掛禮盒'},
+  {n:'25包濾掛禮盒', p:750, c:2, g:'濾掛禮盒'},
+  {n:'鮮乳', p:70, c:2, g:'其他'},
+  {n:'自製優格', p:200, c:2, g:'其他'},
+];
+
+// ═══ 狀態 ═══
+const ST = { muri:{cart:{},tab:0}, apple:{cart:{},tab:0} };
+let orders = { muri:[], apple:[] };
+let puOrders = [];
+let puState = {
+  source:'', delivery:'',
+  beans:{},   // { itemName: qty }
+  filters:{}, // { itemName: qty }
+};
+
+
+// ═══════════════════════════════════════════════════
+// 客戶資料庫（從歷史訂單匯入，86位客戶）
+// 系統啟動時會從Google試算表更新
+// ═══════════════════════════════════════════════════
+let CUSTOMERS = [{"name": "易昕", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 47}, {"name": "麵大哥", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 40}, {"name": "雜貨攤越南姊姊", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 27}, {"name": "水果攤大哥", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 20}, {"name": "香舖二哥", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 17}, {"name": "魚攤阿姨", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 15}, {"name": "雜貨攤姊姊", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 13}, {"name": "滷味攤姊姊", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 13}, {"name": "魚攤姐姐", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 13}, {"name": "水果攤二哥", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 11}, {"name": "昂嶽趴單", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 11}, {"name": "豬肉攤阿姨", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 10}, {"name": "闕小姐", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 10}, {"name": "香舖大哥", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 9}, {"name": "楊阿姨", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 8}, {"name": "闕媽媽", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 8}, {"name": "謝仁心", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 8}, {"name": "Happy媽媽", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 8}, {"name": "潘小姐", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 7}, {"name": "昂嶽", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 6}, {"name": "媽媽", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 6}, {"name": "合作金庫阿姨", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 5}, {"name": "水果攤妹妹", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 5}, {"name": "可愛情侶妹妹", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 5}, {"name": "水果攤姊姊", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 5}, {"name": "葉小姐", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 5}, {"name": "雪莉阿姨", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 5}, {"name": "炒飯哥哥", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 5}, {"name": "雞肉攤阿姨", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 4}, {"name": "鍾小姐", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 4}, {"name": "貴格會阿姨", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 4}, {"name": "阿嬤與孫子", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 4}, {"name": "林先生的太太", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 4}, {"name": "王思允", "phone": "", "address": "政大二街", "source": "line@", "delivery": "親送", "count": 3}, {"name": "蔡俊鑫", "phone": "0952-688-183", "address": "", "source": "line@", "delivery": "711 靖立 （貨到付款）", "count": 3}, {"name": "林治華", "phone": "0928-126-526", "address": "台北市南港區研究院路一段130巷99號C棟C229室", "source": "Line", "delivery": "宅配", "count": 3}, {"name": "游淑妃", "phone": "0936-531-133", "address": "台北市中正區徐州路5號6樓609室內政部民政司", "source": "line@", "delivery": "宅配", "count": 3}, {"name": "林如昕", "phone": "0934-011-206", "address": "高雄市前鎮區民權二路538號24樓", "source": "Line", "delivery": "全家 高雄梧州店", "count": 3}, {"name": "林翰", "phone": "", "address": "", "source": "現場", "delivery": "現取", "count": 3}, {"name": "黑豬肉攤大哥", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 3}, {"name": "雜貨攤姊姊的客人", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 3}, {"name": "剪頭髮阿姨", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 3}, {"name": "慈濟阿姨", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 3}, {"name": "粿阿姨", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 3}, {"name": "越南姊姊的客人", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 3}, {"name": "宜安", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 3}, {"name": "雞肉攤哥哥", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 3}, {"name": "水果攤阿姨", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 3}, {"name": "水果攤的客人", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 3}, {"name": "徐瑞玉", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 3}, {"name": "貝果姊姊", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 3}, {"name": "彼得", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 3}, {"name": "豬肉攤大哥", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 3}, {"name": "Annie Sun", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 3}, {"name": "AJ 蘋果汁媽媽", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 3}, {"name": "雞肉攤阿姨的小姑", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 3}, {"name": "蔡承諺", "phone": "", "address": "台中", "source": "臉書", "delivery": "宅配", "count": 2}, {"name": "林佳玲", "phone": "0917-252-535", "address": "新北市深坑區翠谷街24號", "source": "Line", "delivery": "全家 金典店", "count": 2}, {"name": "劉致媁", "phone": "", "address": "", "source": "現場", "delivery": "現取", "count": 2}, {"name": "Joy 蔡小姐", "phone": "0966-186-163", "address": "", "source": "現場", "delivery": "現取", "count": 2}, {"name": "黃柏誠", "phone": "0932-600-441", "address": "彰化縣芳苑鄉新寶村永豐巷35號", "source": "line@", "delivery": "宅配", "count": 2}, {"name": "黃靜宜", "phone": "0919-901-138", "address": "", "source": "line@", "delivery": "711 萬鴻店（宜蘭）", "count": 2}, {"name": "薛雅莉", "phone": "0928-075-769", "address": "", "source": "line@", "delivery": "711 龍普 （貨到付款）", "count": 2}, {"name": "陳雅珍 Stella", "phone": "0952-216-216", "address": "新北市板橋區華江一路300號18樓之一", "source": "Line", "delivery": "宅配", "count": 2}, {"name": "林致遠", "phone": "0972-242-592", "address": "", "source": "Line", "delivery": "全家 京吉店", "count": 2}, {"name": "Karen", "phone": "", "address": "", "source": "Line", "delivery": "現取", "count": 2}, {"name": "籃嘉琪", "phone": "0935-858-257", "address": "", "source": "Line", "delivery": "711 天北店", "count": 2}, {"name": "葉佳媛", "phone": "0922-110-214", "address": "桃園區平鎮區龍南路348號", "source": "臉書", "delivery": "宅配", "count": 2}, {"name": "薛湘羚", "phone": "0933-087-921", "address": "", "source": "Line", "delivery": "711", "count": 2}, {"name": "彭琬珺", "phone": "", "address": "", "source": "現場", "delivery": "現取", "count": 2}, {"name": "周華萍", "phone": "", "address": "", "source": "現場", "delivery": "現取", "count": 2}, {"name": "林子翔", "phone": "", "address": "", "source": "Line", "delivery": "宅配", "count": 2}, {"name": "陳迪群", "phone": "0933-033-488", "address": "七堵區麗景二街26號", "source": "line@", "delivery": "宅配", "count": 2}, {"name": "胡先生", "phone": "", "address": "", "source": "Line、line@", "delivery": "現取", "count": 2}, {"name": "湛凱", "phone": "", "address": "", "source": "現場", "delivery": "現取", "count": 2}, {"name": "思佑哥哥", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 2}, {"name": "林小姐", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 2}, {"name": "凌姐妹妹", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 2}, {"name": "嚴奶奶", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 2}, {"name": "黑寶爸", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 2}, {"name": "衣服店老闆", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 2}, {"name": "漂亮媽媽客人", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 2}, {"name": "王記水餃", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 2}, {"name": "妹妹", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 2}, {"name": "Tina", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 2}, {"name": "小楊太太", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 2}, {"name": "手沖回購阿姨", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 2}, {"name": "雅涵姊姊", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 2}, {"name": "雜貨攤哥哥", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 2}, {"name": "林阿姨", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 2}, {"name": "林翰夫妻", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 2}, {"name": "蕭貪阿姨", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 2}, {"name": "前面水果攤阿姨", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 2}, {"name": "roxy阿北", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 2}, {"name": "治華博士", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 2}, {"name": "昂嶽趴單-Karan", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 2}, {"name": "昂嶽趴單-玉美", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 2}, {"name": "昂嶽趴單－游淑妃", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 2}, {"name": "修指甲越南姊姊的客人", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 2}, {"name": "琇雯", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 2}, {"name": "台中導遊", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 2}, {"name": "魚攤姊姊", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 2}, {"name": "劉姿伶", "phone": "0922-427-705", "address": "新北市汐止區民族五街50號3F-2", "source": "臉書", "delivery": "宅配", "count": 1}, {"name": "蔡沛蓉 Karan", "phone": "0932-973-929", "address": "台中市北屯區太和三街28號", "source": "Line", "delivery": "全家 花見店 （或是711 祥順店）", "count": 1}, {"name": "Jessica", "phone": "0937-723-002 邱畇華", "address": "", "source": "現場、臉書", "delivery": "711 合億店", "count": 1}, {"name": "Amanda 陳怡君", "phone": "0958-539-156", "address": "桃園市桃園區中埔三街182號11樓", "source": "臉書、line@", "delivery": "宅配", "count": 1}, {"name": "沅利字慢藏", "phone": "", "address": "", "source": "", "delivery": "宅配", "count": 1}, {"name": "古月英", "phone": "0938-515-839", "address": "彰化市埔日街170號", "source": "臉書", "delivery": "宅配", "count": 1}, {"name": "陸凱鳳", "phone": "0919-374-986", "address": "", "source": "現場", "delivery": "現取", "count": 1}, {"name": "如昕", "phone": "", "address": "", "source": "Line", "delivery": "全家", "count": 1}, {"name": "施傳中", "phone": "", "address": "", "source": "", "delivery": "", "count": 1}, {"name": "Sofina Lin 蘇先生", "phone": "", "address": "台北市中山區中山北路三段25號7樓-7", "source": "Line", "delivery": "711", "count": 1}, {"name": "段廷瑜", "phone": "0978-700-282", "address": "新北市新莊區建中街43號9樓", "source": "Line", "delivery": "宅配", "count": 1}, {"name": "洪Yiting", "phone": "", "address": "", "source": "", "delivery": "", "count": 1}, {"name": "徐乙玄", "phone": "0952-799-006", "address": "", "source": "臉書", "delivery": "711 樂安店（貨到付款）", "count": 1}, {"name": "陳僑芬", "phone": "0926-478-815", "address": "", "source": "臉書", "delivery": "全家 松平店", "count": 1}, {"name": "Jenny 安基生技新藥", "phone": "0922-058-367", "address": "", "source": "Line", "delivery": "", "count": 1}, {"name": "Iris Chen", "phone": "0919-393-272", "address": "基隆市安樂區安和一街六巷35號", "source": "line@", "delivery": "宅配", "count": 1}, {"name": "可麗露老闆", "phone": "", "address": "", "source": "現場", "delivery": "現取", "count": 1}, {"name": "陳思翰", "phone": "0987-306-524", "address": "", "source": "", "delivery": "711 新劍潭", "count": 1}, {"name": "徐小姐", "phone": "", "address": "", "source": "現場", "delivery": "現取", "count": 1}, {"name": "安基", "phone": "", "address": "", "source": "Line", "delivery": "宅配", "count": 1}, {"name": "李宗儒", "phone": "", "address": "", "source": "現場", "delivery": "現取", "count": 1}, {"name": "黃雅翎", "phone": "0986-562-172", "address": "", "source": "Line", "delivery": "711 德芝店（貨到付款）", "count": 1}, {"name": "翁永璋", "phone": "", "address": "", "source": "現場", "delivery": "現取", "count": 1}, {"name": "Deborah 琇雯", "phone": "", "address": "", "source": "", "delivery": "", "count": 1}, {"name": "道威的爸爸", "phone": "", "address": "", "source": "現場", "delivery": "現取", "count": 1}, {"name": "媽媽的朋友", "phone": "", "address": "", "source": "現場", "delivery": "現取", "count": 1}, {"name": "梁秀珍", "phone": "0931-344-750", "address": "台南市安平區府前三街129號4樓之一", "source": "Line", "delivery": "宅配", "count": 1}, {"name": "郭晏廷", "phone": "", "address": "", "source": "Line", "delivery": "", "count": 1}, {"name": "Lilith Yang", "phone": "", "address": "", "source": "現場", "delivery": "現取", "count": 1}, {"name": "林淑蓉 ＆施傅中", "phone": "", "address": "", "source": "Line", "delivery": "", "count": 1}, {"name": "陳欣宜", "phone": "0921-945-875", "address": "", "source": "現場", "delivery": "現取", "count": 1}, {"name": "Lu Shili", "phone": "", "address": "", "source": "現場", "delivery": "現取", "count": 1}, {"name": "許引芝", "phone": "", "address": "", "source": "現場", "delivery": "現取", "count": 1}, {"name": "Claudia Lin", "phone": "0939-112-925", "address": "", "source": "臉書", "delivery": "711 瑞和店（貨到付款）", "count": 1}, {"name": "邱麗卿", "phone": "", "address": "", "source": "現場", "delivery": "宅配", "count": 1}, {"name": "凌欣美", "phone": "", "address": "", "source": "現場", "delivery": "現取", "count": 1}, {"name": "Evonne Lee 李怡芳", "phone": "0929-539-769", "address": "", "source": "臉書", "delivery": "711 （26134）", "count": 1}, {"name": "黃怡真", "phone": "0952-710-512", "address": "", "source": "line@", "delivery": "711 遼寧店", "count": 1}, {"name": "Stella", "phone": "0952-216-216", "address": "新北市板橋區華江一路300號18樓之一", "source": "line@", "delivery": "宅配", "count": 1}, {"name": "謝汶知", "phone": "0915-903-937", "address": "中壢市中光路75號2樓", "source": "line@", "delivery": "宅配", "count": 1}, {"name": "謝芸逸", "phone": "0919-943-337", "address": "桃園市桃園區大興西路二段6號11樓之五", "source": "line@", "delivery": "宅配", "count": 1}, {"name": "許德勝", "phone": "0910-827-264", "address": "台南市東區林森路二段79號（長榮中學）", "source": "Line", "delivery": "宅配", "count": 1}, {"name": "Iris Chen 陳詩環", "phone": "0919-393-272", "address": "基隆市安樂區安和一街六巷35號", "source": "line@", "delivery": "宅配", "count": 1}, {"name": "Lan En Tzeng", "phone": "", "address": "", "source": "現場", "delivery": "現取", "count": 1}, {"name": "洪小姐", "phone": "", "address": "", "source": "現場", "delivery": "現取", "count": 1}, {"name": "柯小姐", "phone": "", "address": "", "source": "現場", "delivery": "現取", "count": 1}, {"name": "Nina 唐", "phone": "", "address": "", "source": "現場", "delivery": "現取", "count": 1}, {"name": "Blair Chen", "phone": "", "address": "", "source": "", "delivery": "", "count": 1}, {"name": "林怡綾", "phone": "", "address": "", "source": "Line", "delivery": "宅配", "count": 1}, {"name": "鍾定哲", "phone": "", "address": "", "source": "line@", "delivery": "711 香山 （貨到付款）", "count": 1}, {"name": "Sopia Ku 古曉娟", "phone": "0928-227-235", "address": "新北市深坑區民權路33號21樓", "source": "line@", "delivery": "宅配", "count": 1}, {"name": "李佳穎", "phone": "0975-071-265", "address": "", "source": "Line", "delivery": "711 樹林佳宏", "count": 1}, {"name": "謝佩涵", "phone": "", "address": "", "source": "臉書", "delivery": "宅配", "count": 1}, {"name": "昂嶽媽媽", "phone": "", "address": "", "source": "現場", "delivery": "現取", "count": 1}, {"name": "Jenny 安基生技新藥 張庭瑄", "phone": "0922-058-367 02-2365-5677", "address": "台北市南港區忠孝東路七段508號16樓之六", "source": "Line", "delivery": "宅配", "count": 1}, {"name": "李欣融", "phone": "0978-326-385", "address": "", "source": "Line", "delivery": "711 博源", "count": 1}, {"name": "Kim", "phone": "", "address": "", "source": "現場", "delivery": "現取", "count": 1}, {"name": "子健", "phone": "", "address": "", "source": "Line", "delivery": "全家  嘉義新東義店", "count": 1}, {"name": "Eliza Sie", "phone": "", "address": "", "source": "臉書", "delivery": "宅配", "count": 1}, {"name": "許力文", "phone": "", "address": "", "source": "line@", "delivery": "711", "count": 1}, {"name": "Monica", "phone": "", "address": "", "source": "Line", "delivery": "現取", "count": 1}, {"name": "背後雜貨攤", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "張振洋先生", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "出版社阿姨", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "大哥", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "前門雜貨叔叔", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "Carol", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "退休老師", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "賣花的阿姨", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "菜攤姊姊", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "新加坡教會阿姨", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "修改衣服阿姨", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "有錢夫婦", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "國民黨樁腳", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "花店的客人", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "工程師客人一家", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "帽子大叔", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "光頭大哥", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "胖大姐", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "賴咖啡的客人", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "教練老闆", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "Tina母女", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "店裡兆豐客人", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "短髮阿姨", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "林先生", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "內衣攤姊姊", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "爬山的小哥", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "王個管", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "衣服店的客人", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "雜貨攤阿姨", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "立明", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "怪人", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "許校長", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "媽媽同事", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "前面的理髮阿姨", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "母女", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "麵大哥的女兒", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "Carol的媽媽", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "喝中深的婆婆", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "客人的太太", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "皮可敏阿姨", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "有氣質的媽媽", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "抱貴賓狗夫妻", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "水果攤司機", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "麵大哥女兒男友", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "靜心小學", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "許阿姨", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "法國貿易退休阿北", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "豪豪的媽媽", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "客家阿姨", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "接孩子的媽媽", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "Happy媽媽＆教練", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "G 雞蛋糕妹妹", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "傅先生", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "背後雜貨攤哥哥", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "會計姊姊", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "手作阿姨", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "老男人", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "直排輪爸爸", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "回購的大哥", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "阿綱媽媽", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "老摸", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "國父", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "白髮大叔", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "恩祖學長", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "白牧師", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "Hughes", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "後面雜貨攤阿姨", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "修指甲越南姊姊", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "繼賢", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "李寶琳", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "好人大哥", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "楊光倫", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "有氣質女客人", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "回購妹妹", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "樓上唱歌阿姨", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "昂嶽趴單-許引芝", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "闕弟弟", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "昂嶽趴單－古曉娟", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "昂嶽趴單－Iris", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "昂嶽趴單－Hank", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "昂嶽趴單－怡玲朋友張明宗", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "帶小孩的女客人", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "許力千", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "回購的先生", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "昂嶽趴單-許芷芸", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "昂嶽趴單-謝道威", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "店裡的阿姨客人", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "Uber妹妹", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "客人媽媽", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "走讀大哥", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "男生路人", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "Grace", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "市場大哥", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "魚攤姐姐的媽媽", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "靜心老師", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "昂嶽趴單-許瑞玉", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "昂嶽趴單-Sofina lin", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "昂嶽趴單-Moinica", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "富貴魚阿姨", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "魚阿姨", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "賣西瓜的大哥", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "甜點老奶奶", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "店裡的女客人", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "回購的客人夫妻", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "阿嬤與孫女", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "Chloe", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "昂嶽趴單-盛榮", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "回購的客人阿姨", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "昂嶽趴單-易教官", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "黑豬肉攤哥哥", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}, {"name": "回購客人", "phone": "", "address": "", "source": "蘋果咖啡興隆市場", "delivery": "現取", "count": 1}];
+
+// 從試算表載入最新客戶資料
+async function loadCustomers() {
+  try {
+    const res = await fetch(GAS + '?action=customers');
+    const data = await res.json();
+    if (data.customers && data.customers.length > 0) {
+      CUSTOMERS = data.customers;
+    }
+  } catch(e) {
+    // 使用內建資料
+  }
+}
+
+// ═══ 點餐頁自動完成 ═══
+let acIndex = { muri: -1, apple: -1 };
+
+function acInput(store) {
+  const val = document.getElementById(store + '-customer').value.trim();
+  const drop = document.getElementById(store + '-ac-drop');
+  acIndex[store] = -1;
+  if (!val) { drop.style.display = 'none'; return; }
+  const matches = CUSTOMERS.filter(c =>
+    c.name.toLowerCase().includes(val.toLowerCase())
+  ).slice(0, 6);
+  if (!matches.length) { drop.style.display = 'none'; return; }
+  drop.innerHTML = matches.map((c, i) => `
+    <div class="autocomplete-item" data-idx="${i}"
+      onmousedown="acSelect('${store}', ${i}, ${JSON.stringify(c).replace(/'/g, '\\x27')})"
+      onmouseover="acIndex.${store}=${i};acHighlight('${store}',${matches.length})">
+      <div class="ac-name">${c.name}</div>
+      <div class="ac-sub">${c.phone}${c.phone && c.delivery ? ' · ' : ''}${c.delivery}</div>
+    </div>`).join('');
+  drop.style.display = 'block';
+  drop._matches = matches;
+}
+
+function acHighlight(store, total) {
+  const drop = document.getElementById(store + '-ac-drop');
+  drop.querySelectorAll('.autocomplete-item').forEach((el, i) => {
+    el.classList.toggle('active', i === acIndex[store]);
+  });
+}
+
+function acKey(e, store) {
+  const drop = document.getElementById(store + '-ac-drop');
+  if (drop.style.display === 'none') return;
+  const matches = drop._matches || [];
+  if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    acIndex[store] = Math.min(acIndex[store] + 1, matches.length - 1);
+    acHighlight(store, matches.length);
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    acIndex[store] = Math.max(acIndex[store] - 1, 0);
+    acHighlight(store, matches.length);
+  } else if (e.key === 'Enter' && acIndex[store] >= 0) {
+    e.preventDefault();
+    acSelect(store, acIndex[store], matches[acIndex[store]]);
+  } else if (e.key === 'Escape') {
+    drop.style.display = 'none';
+  }
+}
+
+function acSelect(store, idx, customer) {
+  if (typeof customer === 'string') customer = JSON.parse(customer);
+  document.getElementById(store + '-customer').value = customer.name;
+  document.getElementById(store + '-ac-drop').style.display = 'none';
+  acIndex[store] = -1;
+}
+
+function acBlur(store) {
+  setTimeout(() => {
+    const drop = document.getElementById(store + '-ac-drop');
+    if (drop) drop.style.display = 'none';
+  }, 200);
+}
+
+// ═══ 線上訂購單自動完成 ═══
+let acPuIdx = -1;
+
+function acPuInput() {
+  const val = document.getElementById('pu-name').value.trim();
+  const drop = document.getElementById('pu-ac-drop');
+  acPuIdx = -1;
+  if (!val) { drop.style.display = 'none'; return; }
+  const matches = CUSTOMERS.filter(c =>
+    c.name.toLowerCase().includes(val.toLowerCase())
+  ).slice(0, 6);
+  if (!matches.length) { drop.style.display = 'none'; return; }
+  drop.innerHTML = matches.map((c, i) => `
+    <div class="autocomplete-item" data-idx="${i}"
+      onmousedown="acPuSelect(${JSON.stringify(c).replace(/'/g, '\\x27')})"
+      onmouseover="acPuIdx=${i};acPuHighlight(${matches.length})">
+      <div class="ac-name">${c.name}</div>
+      <div class="ac-sub">${c.phone}${c.phone && c.address ? ' · ' : ''}${c.address ? c.address.substring(0,20)+'...' : ''}</div>
+    </div>`).join('');
+  drop.style.display = 'block';
+  drop._matches = matches;
+}
+
+function acPuHighlight(total) {
+  const drop = document.getElementById('pu-ac-drop');
+  drop.querySelectorAll('.autocomplete-item').forEach((el, i) => {
+    el.classList.toggle('active', i === acPuIdx);
+  });
+}
+
+function acPuKey(e) {
+  const drop = document.getElementById('pu-ac-drop');
+  if (drop.style.display === 'none') return;
+  const matches = drop._matches || [];
+  if (e.key === 'ArrowDown') {
+    e.preventDefault(); acPuIdx = Math.min(acPuIdx + 1, matches.length - 1); acPuHighlight(matches.length);
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault(); acPuIdx = Math.max(acPuIdx - 1, 0); acPuHighlight(matches.length);
+  } else if (e.key === 'Enter' && acPuIdx >= 0) {
+    e.preventDefault(); acPuSelect(matches[acPuIdx]);
+  } else if (e.key === 'Escape') {
+    drop.style.display = 'none';
+  }
+}
+
+function acPuSelect(customer) {
+  if (typeof customer === 'string') customer = JSON.parse(customer);
+  document.getElementById('pu-name').value = customer.name;
+  document.getElementById('pu-phone').value = customer.phone || '';
+  document.getElementById('pu-address').value = customer.address || '';
+  document.getElementById('pu-ac-drop').style.display = 'none';
+  acPuIdx = -1;
+  // 自動選擇來源和發貨方式
+  if (customer.source) {
+    document.querySelectorAll('#source-group .option-btn').forEach(btn => {
+      if (btn.textContent === customer.source) {
+        btn.classList.add('selected');
+        puState.source = customer.source;
+      }
+    });
+  }
+  toast('✓ 已帶入 ' + customer.name + ' 的資料');
+}
+
+function acPuBlur() {
+  setTimeout(() => {
+    const drop = document.getElementById('pu-ac-drop');
+    if (drop) drop.style.display = 'none';
+  }, 200);
+}
+
+// ═══ 初始化 ═══
+function init() {
+  loadCustomers();
+  buildGrid('muri', muriMenu);
+  setDefaultDatetime('muri');
+  setDefaultDatetime('apple');
+  buildGrid('apple', appleMenu);
+  document.getElementById('rdate').textContent =
+    new Date().toLocaleDateString('zh-TW',{year:'numeric',month:'long',day:'numeric',weekday:'long'});
+  go('mo');
+  loadPurchaseLists();
+}
+
+// ═══ 建立點餐格 ═══
+function buildGrid(store, menu) {
+  const container = document.getElementById(store+'-grid');
+  // 飲料（兩欄）
+  const g0 = document.createElement('div');
+  g0.className = 'items-grid-2'; g0.id = store+'-g0';
+  // 甜點（一欄）
+  const g1 = document.createElement('div');
+  g1.className = 'items-grid-1'; g1.id = store+'-g1'; g1.style.display='none';
+  // 豆子與濾掛（三欄，含分類標題）
+  const g2 = document.createElement('div');
+  g2.className = 'items-grid-3'; g2.id = store+'-g2'; g2.style.display='none';
+
+  let lastGroup = '';
+  menu.forEach((item,idx) => {
+    const card = document.createElement('div');
+    card.className = 'item-card';
+    card.id = store+'_'+idx;
+    card.innerHTML = `<div class="qty-badge" id="${store}_b${idx}"></div>
+      <div class="item-name">${item.n}</div>
+      <div class="item-price">$${item.p}</div>`;
+    card.onclick = () => addItem(store, idx);
+
+    if(item.c === 0) g0.appendChild(card);
+    else if(item.c === 1) g1.appendChild(card);
+    else {
+      if(item.g && item.g !== lastGroup) {
+        const lbl = document.createElement('div');
+        lbl.className = 'cat-label'; lbl.textContent = item.g;
+        g2.appendChild(lbl); lastGroup = item.g;
+      }
+      g2.appendChild(card);
+    }
+  });
+  container.appendChild(g0);
+  container.appendChild(g1);
+  container.appendChild(g2);
+}
+
+// ═══ 頁籤切換 ═══
+function switchTab(store, tab) {
+  ST[store].tab = tab;
+  const tabRow = document.getElementById(store+'-tabrow');
+  tabRow.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',i===tab));
+  [0,1,2].forEach(i=>{
+    const g = document.getElementById(store+'-g'+i);
+    if(g) g.style.display = i===tab ? '' : 'none';
+  });
+}
+
+// ═══ 購物車 ═══
+function addItem(store,idx) {
+  const cart=ST[store].cart;
+  cart[idx]=(cart[idx]||0)+1;
+  renderCart(store);
+}
+function chgQty(store,idx,d) {
+  const cart=ST[store].cart;
+  cart[idx]=(cart[idx]||0)+d;
+  if(cart[idx]<=0) delete cart[idx];
+  renderCart(store);
+}
+function renderCart(store) {
+  const menu=store==='muri'?muriMenu:appleMenu;
+  const cart=ST[store].cart;
+  const keys=Object.keys(cart);
+  menu.forEach((_,idx)=>{
+    const el=document.getElementById(store+'_'+idx);
+    const b=document.getElementById(store+'_b'+idx);
+    if(!el) return;
+    const q=cart[idx]||0;
+    el.classList.toggle('hq',q>0);
+    if(b) b.textContent=q||'';
+  });
+  const wrap=document.getElementById(store+'-cart-wrap');
+  const sub=document.getElementById(store+'-sub');
+  if(!keys.length){wrap.style.display='none';sub.disabled=true;sub.textContent='請選擇品項';return;}
+  wrap.style.display='block';
+  let total=0,html='';
+  keys.forEach(idx=>{
+    const item=menu[idx];const q=cart[idx];const s=item.p*q;total+=s;
+    html+=`<div class="cart-item"><div class="ci-name">${item.n}</div>
+      <div class="qc"><button class="qb" onclick="chgQty('${store}',${idx},-1)">−</button>
+      <span class="qn">${q}</span>
+      <button class="qb" onclick="chgQty('${store}',${idx},1)">＋</button></div>
+      <div class="ci-sub">$${s}</div></div>`;
+  });
+  document.getElementById(store+'-cart-list').innerHTML=html;
+  document.getElementById(store+'-total').textContent='$'+total;
+  sub.disabled=false;sub.textContent=`送出訂單 $${total}`;
+}
+
+// ═══ 送出點餐 ═══
+async function submitOrder(store) {
+  const menu=store==='muri'?muriMenu:appleMenu;
+  const cart=ST[store].cart;
+  const keys=Object.keys(cart);
+  if(!keys.length) return;
+  const note=document.getElementById(store+'-note').value.trim();
+  const customer=document.getElementById(store+'-customer').value.trim();
+  // 取得日期時間，沒填就用現在時間
+  const dtInput = document.getElementById(store+'-datetime').value;
+  const orderTime = dtInput ? new Date(dtInput).toLocaleString('zh-TW',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}) : new Date().toLocaleString('zh-TW',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});
+  const items=keys.map(i=>`${menu[i].n}×${cart[i]}`).join('、');
+  const total=keys.reduce((s,i)=>s+menu[i].p*cart[i],0);
+  const btn=document.getElementById(store+'-sub');
+  btn.disabled=true;btn.textContent='送出中…';
+  try {
+    await fetch(GAS,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({type:'order',store,items,total,note,customer,orderTime})});
+    document.getElementById(store+'-ok').classList.add('show');
+  } catch(e){toast('連線失敗，請重試');btn.disabled=false;btn.textContent=`送出訂單 $${total}`;}
+}
+function resetOrder(store) {
+  ST[store].cart={};
+  document.getElementById(store+'-note').value='';
+  document.getElementById(store+'-customer').value='';
+  setDefaultDatetime(store);
+  document.getElementById(store+'-ok').classList.remove('show');
+  renderCart(store);
+}
+
+function setDefaultDatetime(store) {
+  const now = new Date();
+  const pad = n => String(n).padStart(2,'0');
+  const local = now.getFullYear()+'-'+pad(now.getMonth()+1)+'-'+pad(now.getDate())+'T'+pad(now.getHours())+':'+pad(now.getMinutes());
+  document.getElementById(store+'-datetime').value = local;
+}
+
+// ═══ 後台訂單 ═══
+async function loadOrders(store) {
+  const list=document.getElementById(store+'-orders');
+  list.innerHTML='<div class="loading-msg">載入中…</div>';
+  try {
+    const res=await fetch(GAS+'?action=orders&store='+store);
+    const data=await res.json();
+    orders[store]=data.orders||[];
+    renderOrders(store);updateStats(store);updateReport();
+  } catch(e){list.innerHTML='<div class="empty-msg">載入失敗，請點刷新</div>';}
+}
+function renderOrders(store) {
+  const list=document.getElementById(store+'-orders');
+  const ords=orders[store];
+  if(!ords||!ords.length){list.innerHTML='<div class="empty-msg">今日尚無訂單</div>';return;}
+  list.innerHTML=ords.map(o=>`
+    <div class="order-card ${o.status==='完成'?'done':''}">
+      <div class="oc-top">
+        <div><div class="oc-id">#${o.orderId}${o.customer?' ／ '+o.customer:''}</div><div class="oc-time">${o.orderTime||o.time}</div></div>
+        <span class="sbadge ${o.status==='完成'?'sd':'sp'}">${o.status}</span>
+      </div>
+      <div class="oc-items">${o.items}</div>
+      <div class="oc-bottom">
+        <div><div class="oc-total">$${o.total}</div>${o.note?`<div class="oc-note">備註：${o.note}</div>`:''}</div>
+        <button class="done-btn ${o.status==='完成'?'completed':''}"
+          onclick="${o.status==='完成'?'':` markDone('${store}','${o.orderId}',this,false)`}"
+          ${o.status==='完成'?'disabled':''}>
+          ${o.status==='完成'?'已完成':'✓ 完成'}</button>
+      </div>
+    </div>`).join('');
+}
+function updateStats(store) {
+  const ords=orders[store]||[];
+  const pre=store==='muri'?'m':'a';
+  document.getElementById(pre+'c').textContent=ords.length;
+  document.getElementById(pre+'r').textContent=ords.reduce((s,o)=>s+(parseInt(o.total)||0),0);
+}
+async function markDone(store,orderId,btn,isPurchase) {
+  btn.textContent='…';btn.disabled=true;
+  try {
+    await fetch(`${GAS}?action=done&store=${store}&orderId=${orderId}&isPurchase=${isPurchase?'1':'0'}`);
+    if(isPurchase){
+      const o=puOrders.find(x=>x.orderId==orderId);if(o)o.status='完成';
+      renderPurchases();
+    } else {
+      const o=orders[store].find(x=>x.orderId==orderId);if(o)o.status='完成';
+      renderOrders(store);updateStats(store);updateReport();
+    }
+    toast('已標記完成');
+  } catch(e){toast('操作失敗');btn.textContent='✓ 完成';btn.disabled=false;}
+}
+
+// ═══ 線上訂購單 ═══
+async function loadPurchaseLists() {
+  try {
+    const [bRes, fRes] = await Promise.all([
+      fetch(GAS+'?action=beans'),
+      fetch(GAS+'?action=filters')
+    ]);
+    const bData = await bRes.json();
+    const fData = await fRes.json();
+    buildCheckList('bean-list', bData.items||[], 'beans');
+    buildCheckList('filter-list', fData.items||[], 'filters');
+  } catch(e) {
+    document.getElementById('bean-list').innerHTML='<div class="loading-items">載入失敗，請重新整理頁面</div>';
+    document.getElementById('filter-list').innerHTML='<div class="loading-items">載入失敗，請重新整理頁面</div>';
+  }
+}
+
+function buildCheckList(containerId, items, type) {
+  const container = document.getElementById(containerId);
+  if(!items.length){container.innerHTML='<div class="loading-items">目前暫無品項</div>';return;}
+  container.innerHTML = items.map((name,i)=>`
+    <div class="bean-item" id="${type}_${i}" onclick="toggleBean('${type}',${i},'${name.replace(/'/g,"\\'")}')">
+      <div class="bean-check"></div>
+      <div class="bean-name">${name}</div>
+      <div class="bean-qty">
+        <button class="bqb" onclick="event.stopPropagation();beanQty('${type}',${i},-1,'${name.replace(/'/g,"\\'")}')">−</button>
+        <span class="bqn" id="${type}_q${i}">1</span>
+        <button class="bqb" onclick="event.stopPropagation();beanQty('${type}',${i},1,'${name.replace(/'/g,"\\'")}')">＋</button>
+      </div>
+    </div>`).join('');
+}
+
+function toggleBean(type,idx,name) {
+  const el=document.getElementById(type+'_'+idx);
+  const checked=el.classList.toggle('checked');
+  if(checked) { puState[type][name]=1; }
+  else { delete puState[type][name]; }
+}
+function beanQty(type,idx,d,name) {
+  if(!puState[type][name]) return;
+  puState[type][name]=Math.max(1,(puState[type][name]||1)+d);
+  document.getElementById(type+'_q'+idx).textContent=puState[type][name];
+}
+
+function selectOption(group,btn) {
+  document.getElementById(group+'-group').querySelectorAll('.option-btn')
+    .forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected');
+  puState[group]=btn.textContent;
+}
+
+async function submitPurchase() {
+  const name=document.getElementById('pu-name').value.trim();
+  const phone=document.getElementById('pu-phone').value.trim();
+  if(!name||!phone){toast('請填寫姓名與電話');return;}
+
+  const beansText=Object.entries(puState.beans).map(([n,q])=>`${n}×${q}`).join('、')||'';
+  const filtersText=Object.entries(puState.filters).map(([n,q])=>`${n}×${q}`).join('、')||'';
+  if(!beansText&&!filtersText){toast('請至少選擇一個品項');return;}
+
+  const btn=document.getElementById('pu-submit');
+  btn.disabled=true;btn.textContent='送出中…';
+  try {
+    await fetch(GAS,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        type:'purchase',
+        name, phone,
+        address:document.getElementById('pu-address').value.trim(),
+        source:puState.source||'未填',
+        delivery:puState.delivery||'未填',
+        beans:beansText, filters:filtersText,
+        note:document.getElementById('pu-note').value.trim()
+      })});
+    document.getElementById('pu-ok').classList.add('show');
+  } catch(e){toast('連線失敗，請重試');btn.disabled=false;btn.textContent='送出訂購';}
+}
+function resetPurchase() {
+  document.getElementById('pu-ok').classList.remove('show');
+  document.getElementById('pu-name').value='';
+  document.getElementById('pu-phone').value='';
+  document.getElementById('pu-address').value='';
+  document.getElementById('pu-note').value='';
+  document.querySelectorAll('.option-btn').forEach(b=>b.classList.remove('selected'));
+  document.querySelectorAll('.bean-item').forEach(b=>b.classList.remove('checked'));
+  puState={source:'',delivery:'',beans:{},filters:{}};
+  document.getElementById('pu-submit').disabled=false;
+  document.getElementById('pu-submit').textContent='送出訂購';
+}
+
+// ═══ 訂購後台 ═══
+async function loadPurchases() {
+  const list=document.getElementById('pu-orders');
+  list.innerHTML='<div class="loading-msg">載入中…</div>';
+  try {
+    const res=await fetch(GAS+'?action=purchases');
+    const data=await res.json();
+    puOrders=data.orders||[];
+    renderPurchases();
+    document.getElementById('pac').textContent=puOrders.filter(o=>o.status!=='完成').length;
+  } catch(e){list.innerHTML='<div class="empty-msg">載入失敗，請點刷新</div>';}
+}
+function renderPurchases() {
+  const list=document.getElementById('pu-orders');
+  if(!puOrders.length){list.innerHTML='<div class="empty-msg">尚無訂購單</div>';return;}
+  list.innerHTML=puOrders.map(o=>`
+    <div class="pu-order-card ${o.status==='完成'?'done':''}">
+      <div class="oc-top">
+        <div>
+          <div class="pu-oc-name">${o.name}</div>
+          <div class="pu-oc-meta">#${o.orderId}　${o.time}　${o.phone}</div>
+        </div>
+        <span class="sbadge ${o.status==='完成'?'sd':'sp'}">${o.status}</span>
+      </div>
+      ${o.beans&&o.beans!=='（無）'?`<div class="pu-oc-section"><div class="pu-oc-label">☕ 咖啡豆</div><div class="pu-oc-content">${o.beans}</div></div>`:''}
+      ${o.filters&&o.filters!=='（無）'?`<div class="pu-oc-section"><div class="pu-oc-label">🎁 濾掛</div><div class="pu-oc-content">${o.filters}</div></div>`:''}
+      <div class="pu-oc-section"><div class="pu-oc-label">發貨</div><div class="pu-oc-content">${o.delivery} ／ 來源：${o.source}</div></div>
+      ${o.address?`<div class="pu-oc-section"><div class="pu-oc-label">地址</div><div class="pu-oc-content">${o.address}</div></div>`:''}
+      ${o.note?`<div class="pu-oc-section"><div class="pu-oc-label">備註</div><div class="pu-oc-content">${o.note}</div></div>`:''}
+      <div class="oc-bottom" style="margin-top:8px">
+        <div></div>
+        <button class="done-btn ${o.status==='完成'?'completed':''}" style="background:#a080c8;color:#111"
+          onclick="${o.status==='完成'?'':` markDone('',  '${o.orderId}',this,true)`}"
+          ${o.status==='完成'?'disabled':''}>
+          ${o.status==='完成'?'已完成':'✓ 完成'}</button>
+      </div>
+    </div>`).join('');
+}
+
+// ═══ 報表 ═══
+function updateReport() {
+  ['muri','apple'].forEach(s=>{
+    const ords=orders[s]||[];
+    const pre=s==='muri'?'rm':'ra';
+    document.getElementById(pre+'c').textContent=ords.length+' 人';
+    document.getElementById(pre+'r').textContent='$'+ords.reduce((a,o)=>a+(parseInt(o.total)||0),0);
+  });
+  const all=[...(orders.muri||[]),...(orders.apple||[])];
+  document.getElementById('rtc').textContent=all.length+' 人';
+  document.getElementById('rtr').textContent='$'+all.reduce((a,o)=>a+(parseInt(o.total)||0),0);
+}
+function copyReport() {
+  const mc=orders.muri?.length||0,mr=orders.muri?.reduce((a,o)=>a+(parseInt(o.total)||0),0)||0;
+  const ac=orders.apple?.length||0,ar=orders.apple?.reduce((a,o)=>a+(parseInt(o.total)||0),0)||0;
+  const d=new Date().toLocaleDateString('zh-TW');
+  navigator.clipboard.writeText(`📊 ${d} 營業報表\n⛰ 木日山：來客${mc}人 / 營收$${mr}\n🍎 景華街：來客${ac}人 / 營收$${ar}\n📌 合計：${mc+ac}人 / 營收$${mr+ar}`)
+    .then(()=>toast('✓ 已複製'));
+}
+
+// ═══ 頁面切換 ═══
+function go(id) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('am','aa','ar','ap'));
+  document.getElementById('p-'+id).classList.add('active');
+  const tab=document.getElementById('t-'+id);
+  if(id.startsWith('m')) tab.classList.add('am');
+  else if(id.startsWith('a')) tab.classList.add('aa');
+  else if(id==='pu'||id==='pa') tab.classList.add('ap');
+  else tab.classList.add('ar');
+  if(id==='ma') loadOrders('muri');
+  if(id==='aa') loadOrders('apple');
+  if(id==='pa') loadPurchases();
+  if(id==='rp'){loadOrders('muri');loadOrders('apple');}
+}
+
+function toast(msg) {
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+init();
+</script>
+</body>
+</html>
